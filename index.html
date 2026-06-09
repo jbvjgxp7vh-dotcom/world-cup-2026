@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>World Cup 2026 · Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>
+:root {
+  --bg: #0b0d10; --panel: #12161c; --panel-2: #1a1f27;
+  --text: #e8ecf1; --muted: #8b95a3;
+  --green: #26d07c; --red: #ef476f; --amber: #ffba08;
+  --accent: #4cc9f0; --accent-2: #7c5cff; --border: #222831;
+  --gold: #ffcd00;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  min-height: 100vh; padding-bottom: 48px;
+}
+header.top {
+  padding: 22px 24px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  background: linear-gradient(180deg, rgba(124,92,255,0.10), transparent);
+}
+header.top h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+header.top h1 .ball { margin-right: 8px; }
+header.top h1 .gold { color: var(--gold); }
+header.top .meta { color: var(--muted); font-size: 12px; }
+
+.section { padding: 18px 24px 4px; }
+.section h2 {
+  font-size: 11px; font-weight: 600; color: var(--accent-2);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+  display: flex; align-items: baseline; gap: 8px;
+}
+.section h2 .sub { color: var(--muted); font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+/* Hero countdown */
+.hero {
+  margin: 18px 24px 4px; padding: 20px 22px;
+  background: var(--panel-2); border: 1px solid var(--border);
+  border-left: 3px solid var(--gold); border-radius: 12px;
+}
+.hero .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.hero .match { font-size: 20px; font-weight: 600; margin: 6px 0 2px; letter-spacing: -0.01em; }
+.hero .when { font-size: 13px; color: var(--muted); }
+.hero .count { margin-top: 14px; font-variant-numeric: tabular-nums; display: flex; gap: 14px; flex-wrap: wrap; }
+.hero .count .unit { text-align: center; }
+.hero .count .num { font-size: 30px; font-weight: 700; color: var(--gold); line-height: 1; }
+.hero .count .cap { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.hero .live { color: var(--red); font-weight: 700; font-size: 22px; animation: pulse 1.4s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
+/* Fixture cards */
+.fixtures { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.fx { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.fx.next { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(255,205,0,0.25); }
+.fx .fx-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.fx .opp { font-size: 16px; font-weight: 600; letter-spacing: -0.005em; }
+.fx .tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 99px; white-space: nowrap; }
+.fx .tag.next { background: rgba(255,205,0,0.16); color: var(--gold); }
+.fx .tag.ft { background: rgba(38,208,124,0.14); color: var(--green); }
+.fx .tag.live { background: rgba(239,71,111,0.16); color: var(--red); }
+.fx .aest { font-size: 15px; font-weight: 600; color: var(--accent); }
+.fx .local { font-size: 12px; color: var(--muted); }
+.fx .venue { font-size: 12px; color: var(--muted); }
+.fx .score { font-size: 18px; font-weight: 700; color: var(--gold); margin-top: 2px; }
+
+/* Standings table */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+.tbl th, .tbl td { padding: 7px 8px; text-align: center; border-bottom: 1px solid var(--border); }
+.tbl th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.tbl td.team { text-align: left; font-weight: 600; }
+.tbl tr.me td { color: var(--gold); }
+.note { color: var(--muted); font-size: 12px; margin-top: 8px; }
+
+/* Key matches timeline */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl { display: grid; grid-template-columns: 150px 1fr; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.tl .when { color: var(--accent); font-weight: 600; font-size: 13px; }
+.tl .what { font-size: 13px; }
+.tl .what .det { color: var(--muted); font-size: 12px; }
+.tl.big .when, .tl.big .what strong { color: var(--gold); }
+.tl.big { background: rgba(255,205,0,0.05); border-radius: 8px; padding: 11px 10px; }
+
+/* News */
+.news { display: flex; flex-direction: column; gap: 8px; }
+.news .item { background: var(--panel); border: 1px solid var(--border); border-radius: 9px; padding: 10px 13px; font-size: 13px; }
+.news .item .d { color: var(--muted); font-size: 11px; margin-right: 7px; font-variant-numeric: tabular-nums; }
+
+/* Info grid */
+.info { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.info .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.info .card .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 4px; }
+.info .card .v { font-size: 14px; font-weight: 500; }
+.info .card .v .hi { color: var(--green); font-weight: 600; }
+
+footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
+@media (max-width: 600px) {
+  .section { padding: 14px 16px 4px; }
+  header.top { padding: 18px 16px 14px; }
+  .hero { margin: 14px 16px 4px; }
+  footer { padding: 0 16px; }
+  .tl { grid-template-columns: 116px 1fr; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1><span class="ball">⚽</span><span class="gold">World Cup 2026</span></h1>
+  <span class="meta">Following 🇦🇺 Australia · 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England · all 12 groups + live Polymarket odds · 11 Jun – 19 Jul</span>
+</header>
+
+<!-- Live next-match countdown (soonest across followed teams) -->
+<div class="hero" id="hero">
+  <div class="label">Next match — your teams</div>
+  <div class="match" id="hero-match">—</div>
+  <div class="when" id="hero-when"></div>
+  <div class="count" id="hero-count"></div>
+</div>
+
+<div class="section" id="sec-AUS">
+  <h2>🇦🇺 Australia <span class="sub">Group D · USA · Türkiye · Paraguay</span></h2>
+  <div class="fixtures" data-fx="AUS"></div>
+  <table class="tbl"><thead><tr><th class="team" style="text-align:left">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody data-st="AUS"></tbody></table>
+  <div class="note" data-note="AUS"></div>
+</div>
+
+<div class="section" id="sec-ENG">
+  <h2>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England <span class="sub">Group L · Croatia · Ghana · Panama</span></h2>
+  <div class="fixtures" data-fx="ENG"></div>
+  <table class="tbl"><thead><tr><th class="team" style="text-align:left">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody data-st="ENG"></tbody></table>
+  <div class="note" data-note="ENG"></div>
+</div>
+
+<!-- All 12 groups + title odds -->
+<style>
+  .wc-odds-bar{display:flex;align-items:center;gap:8px;margin:2px 24px 0;color:var(--muted);font-size:11px}
+  .wc-odds-bar .dot{width:7px;height:7px;border-radius:99px;background:var(--green);box-shadow:0 0 6px var(--green)}
+  .wc-odds-bar.stale .dot{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+  .wc-odds-bar button{background:var(--panel-2);color:var(--muted);border:1px solid var(--border);border-radius:7px;padding:3px 9px;font:inherit;font-size:11px;cursor:pointer}
+  .wc-odds-bar button:hover{color:var(--text);border-color:var(--accent)}
+  /* Title-odds leaderboard */
+  .lead{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+  .lead .row{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:8px 11px;position:relative;overflow:hidden}
+  .lead .row .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,rgba(124,92,255,.20),rgba(76,201,240,.05));z-index:0}
+  .lead .row>*{position:relative;z-index:1}
+  .lead .row .pos{color:var(--muted);font-size:11px;width:16px;text-align:right;font-variant-numeric:tabular-nums}
+  .lead .row .fl{font-size:16px}
+  .lead .row .nm{flex:1;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lead .row .od{font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums;font-size:13px}
+  .lead .row.me{border-color:var(--gold);box-shadow:0 0 0 1px rgba(255,205,0,.25)}
+  .lead .row.me .nm{color:var(--gold)}
+  /* Group cards */
+  .grps{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+  .grp{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px 15px}
+  .grp.me{border-color:rgba(255,205,0,.45);box-shadow:0 0 0 1px rgba(255,205,0,.12)}
+  .grp .gh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+  .grp .gh .lt{font-size:14px;font-weight:700;letter-spacing:-.01em}
+  .grp .gh .fav{font-size:11px;color:var(--muted)}
+  .grp .gh .fav b{color:var(--green)}
+  .gtbl{width:100%;border-collapse:collapse;font-size:12.5px}
+  .gtbl th{color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.05em;text-align:right;padding:0 4px 5px}
+  .gtbl th.l{text-align:left}
+  .gtbl td{padding:4px;border-top:1px solid var(--border);text-align:right;font-variant-numeric:tabular-nums}
+  .gtbl td.tm{text-align:left;font-weight:600;white-space:nowrap}
+  .gtbl td.rk{color:var(--muted);font-size:11px}
+  .gtbl td.od{color:var(--gold);font-weight:700}
+  .gtbl tr.me td{color:var(--gold)}
+  .gtbl tr.me td.rk{color:var(--amber)}
+  .fxlist{margin-top:11px;display:flex;flex-direction:column;gap:9px}
+  .fxlist .h{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .fxr .ln{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:3px}
+  .fxr .ln .s{font-weight:600;white-space:nowrap}
+  .fxr .ln .vs{color:var(--muted)}
+  .fxr .ln .dt{margin-left:auto;color:var(--muted);font-size:10.5px;font-variant-numeric:tabular-nums}
+  .fxr .bar{display:flex;height:16px;border-radius:5px;overflow:hidden;background:var(--panel-2);font-size:9.5px;font-weight:700}
+  .fxr .bar i{display:flex;align-items:center;justify-content:center;color:#0b0d10;min-width:0;overflow:hidden;font-style:normal}
+  .fxr .bar i.a{background:var(--accent)}
+  .fxr .bar i.d{background:#5b6573;color:var(--text)}
+  .fxr .bar i.b{background:var(--accent-2);color:#fff}
+  @media(max-width:600px){.wc-odds-bar{margin:2px 16px 0}}
+</style>
+
+<div class="wc-odds-bar" id="wc-oddsbar">
+  <span class="dot"></span><span id="wc-oddsmeta">odds loading…</span>
+  <button id="wc-refresh" type="button">↻ refresh</button>
+</div>
+
+<div class="section">
+  <h2>🏆 Title Odds <span class="sub">Polymarket — implied chance of winning the cup</span></h2>
+  <div class="lead" id="wc-lead"></div>
+</div>
+
+<div class="section">
+  <h2>📊 All 12 Groups <span class="sub">FIFA rank · title odds · live match odds (win / draw / win)</span></h2>
+  <div class="grps" id="wc-grps"></div>
+  <div class="note">Top 2 of each group advance to the Round of 32, plus the 8 best third-placed teams. Match bars are Polymarket 1X2 prices (left team win · draw · right team win). 🇦🇺 Australia (D) &amp; 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England (L) highlighted.</div>
+</div>
+<!-- WC-GROUPS:END -->
+
+<div class="section">
+  <h2>⭐ Key Matches <span class="sub">tournament milestones (AEST where timed)</span></h2>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<div class="section">
+  <h2>📰 Top-teams News <span class="sub">Argentina · France · Spain · Brazil · Portugal · Germany · Netherlands</span></h2>
+  <div class="news" id="news"></div>
+</div>
+
+<div class="section">
+  <h2>🏆 Tournament</h2>
+  <div class="info">
+    <div class="card"><div class="k">Dates</div><div class="v">11 Jun – <span class="hi">19 Jul 2026</span></div></div>
+    <div class="card"><div class="k">Hosts</div><div class="v">USA · Canada · Mexico</div></div>
+    <div class="card"><div class="k">Format</div><div class="v">48 teams · new Round of 32</div></div>
+    <div class="card"><div class="k">Broadcast (AU)</div><div class="v"><span class="hi">SBS</span> &amp; SBS On Demand — free</div></div>
+    <div class="card"><div class="k">Final</div><div class="v">Mon 20 Jul, 5am AEST · MetLife, NY/NJ</div></div>
+  </div>
+</div>
+
+<footer>
+  Fixtures final as of 3 Jun 2026 · countdown uses your device clock.
+  Title &amp; per-match odds: <strong>Polymarket</strong> — fetched live in your browser each load,
+  with a snapshot fallback if the live feed is unavailable. FIFA rankings current 2026.
+  Unofficial fan page · not affiliated with FIFA.
+</footer>
+
+<script>
+// ---- Tournament data. AEST = UTC+10, no DST. ----
+const TEAMS = {
+  AUS: {
+    name: "Australia", flag: "🇦🇺",
+    matches: [
+      { id:"A1", opp:"Türkiye 🇹🇷", home:true,  kickoff:"2026-06-14T14:00:00+10:00", aest:"Sun 14 Jun, 2:00pm AEST", local:"Sat 13 Jun, 9:00pm — Vancouver PDT", venue:"BC Place, Vancouver 🇨🇦", fin:false, ours:null, theirs:null },
+      { id:"A2", opp:"USA 🇺🇸",     home:false, kickoff:"2026-06-20T05:00:00+10:00", aest:"Sat 20 Jun, 5:00am AEST", local:"Fri 19 Jun, 12:00pm — Seattle PDT", venue:"Seattle Stadium (Lumen Field) 🇺🇸", fin:false, ours:null, theirs:null },
+      { id:"A3", opp:"Paraguay 🇵🇾", home:true,  kickoff:"2026-06-26T12:00:00+10:00", aest:"Fri 26 Jun, 12:00pm AEST", local:"Thu 25 Jun, 7:00pm — Santa Clara PDT", venue:"SF Bay Area Stadium (Levi's) 🇺🇸", fin:false, ours:null, theirs:null },
+    ],
+    standings: [
+      { team:"United States 🇺🇸", p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+      { team:"Türkiye 🇹🇷",        p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+      { team:"Australia 🇦🇺", me:true, p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+      { team:"Paraguay 🇵🇾",       p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+    ],
+  },
+  ENG: {
+    name: "England", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    matches: [
+      { id:"E1", opp:"Croatia 🇭🇷", home:true, kickoff:"2026-06-18T06:00:00+10:00", aest:"Thu 18 Jun, 6:00am AEST", local:"Wed 17 Jun, 3:00pm — Dallas CDT", venue:"Dallas Stadium (AT&T), Arlington 🇺🇸", fin:false, ours:null, theirs:null },
+      { id:"E2", opp:"Ghana 🇬🇭",   home:true, kickoff:"2026-06-24T06:00:00+10:00", aest:"Wed 24 Jun, 6:00am AEST", local:"Tue 23 Jun, 4:00pm — Boston EDT", venue:"Boston Stadium (Gillette), Foxborough 🇺🇸", fin:false, ours:null, theirs:null },
+      { id:"E3", opp:"Panama 🇵🇦",  home:true, kickoff:"2026-06-28T07:00:00+10:00", aest:"Sun 28 Jun, 7:00am AEST", local:"Sat 27 Jun, 5:00pm — NY/NJ EDT", venue:"NY/NJ Stadium (MetLife) 🇺🇸", fin:false, ours:null, theirs:null },
+    ],
+    standings: [
+      { team:"England 🏴󠁧󠁢󠁥󠁮󠁧󠁿", me:true, p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+      { team:"Croatia 🇭🇷", p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+      { team:"Ghana 🇬🇭",   p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+      { team:"Panama 🇵🇦",  p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0 },
+    ],
+  },
+};
+const MATCH_MS = 2 * 60 * 60 * 1000; // ~2h "LIVE" window
+
+// Key matches / knockout timeline (static milestones).
+const KEY = [
+  { when:"Thu 11 Jun",            what:"Opening match",      det:"Mexico v South Africa · Estadio Azteca" },
+  { when:"11–27 Jun",             what:"Group stage",        det:"72 matches · 12 groups" },
+  { when:"28 Jun – 3 Jul",        what:"Round of 32",        det:"New this edition — 32 teams advance" },
+  { when:"4–7 Jul",               what:"Round of 16",        det:"" },
+  { when:"9–11 Jul",              what:"Quarter-finals",     det:"" },
+  { when:"14–15 Jul",             what:"Semi-finals",        det:"" },
+  { when:"18 Jul",                what:"Third-place play-off", det:"" },
+  { when:"Mon 20 Jul, 5am AEST",  what:"FINAL",              det:"MetLife Stadium, NY/NJ (Sun 19 Jul, 3pm EDT)", big:true },
+];
+
+// Top-teams news (overlaid from the tracker note at load).
+let NEWS = [];
+
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const allMatches = () => Object.values(TEAMS).flatMap(t => t.matches.map(m => ({ ...m, team: t })));
+function label(m, t){ return m.home ? t.name + " v " + m.opp : m.opp + " v " + t.name; }
+function pad(n){ return String(n).padStart(2,"0"); }
+function scoreStr(m, t){
+  if(!m.fin || m.ours==null) return null;
+  const opp = m.opp.replace(/[^\p{L}\s]/gu,"").trim();   // drop flag emoji
+  return m.home ? t.name+" "+m.ours+"–"+m.theirs+" "+opp : opp+" "+m.theirs+"–"+m.ours+" "+t.name;
+}
+
+function renderFixtures(){
+  const now = Date.now();
+  for (const [key, t] of Object.entries(TEAMS)){
+    const wrap = document.querySelector('[data-fx="'+key+'"]');
+    if (!wrap) continue;
+    const nextIdx = t.matches.findIndex(m => new Date(m.kickoff).getTime() + MATCH_MS > now && !m.fin);
+    wrap.innerHTML = "";
+    t.matches.forEach((m, i) => {
+      const ko = new Date(m.kickoff).getTime();
+      const live = now >= ko && now < ko + MATCH_MS && !m.fin;
+      const done = m.fin || now >= ko + MATCH_MS;
+      let tag = "";
+      if (live) tag = '<span class="tag live">● Live</span>';
+      else if (done) tag = '<span class="tag ft">Full time</span>';
+      else if (i === nextIdx) tag = '<span class="tag next">Next</span>';
+      const sc = scoreStr(m, t);
+      const card = document.createElement("div");
+      card.className = "fx" + (i === nextIdx && !live && !done ? " next" : "");
+      card.innerHTML =
+        '<div class="fx-top"><span class="opp">' + label(m, t) + '</span>' + tag + '</div>' +
+        '<div class="aest">' + m.aest + '</div>' +
+        '<div class="local">' + m.local + '</div>' +
+        '<div class="venue">' + m.venue + '</div>' +
+        (sc ? '<div class="score">' + sc + '</div>' : '');
+      wrap.appendChild(card);
+    });
+  }
+}
+
+function renderHero(){
+  const now = Date.now();
+  const upcoming = allMatches()
+    .filter(m => new Date(m.kickoff).getTime() + MATCH_MS > now && !m.fin)
+    .sort((a,b) => new Date(a.kickoff) - new Date(b.kickoff));
+  const next = upcoming[0];
+  const matchEl = document.getElementById("hero-match");
+  const whenEl = document.getElementById("hero-when");
+  const countEl = document.getElementById("hero-count");
+  if (!next){
+    document.getElementById("hero").style.borderLeftColor = "var(--green)";
+    matchEl.textContent = "Group stage complete";
+    whenEl.textContent = "Knockouts from 28 Jun — see Key Matches below";
+    countEl.innerHTML = "";
+    return;
+  }
+  const ko = new Date(next.kickoff).getTime();
+  matchEl.textContent = next.team.flag + "  " + label(next, next.team);
+  whenEl.textContent = next.aest + " · " + next.venue;
+  if (now >= ko){ countEl.innerHTML = '<span class="live">● LIVE NOW</span>'; return; }
+  let diff = Math.floor((ko - now) / 1000);
+  const d = Math.floor(diff/86400); diff -= d*86400;
+  const h = Math.floor(diff/3600);  diff -= h*3600;
+  const mi = Math.floor(diff/60);   const s = diff - mi*60;
+  countEl.innerHTML =
+    '<div class="unit"><div class="num">'+d+'</div><div class="cap">days</div></div>' +
+    '<div class="unit"><div class="num">'+pad(h)+'</div><div class="cap">hrs</div></div>' +
+    '<div class="unit"><div class="num">'+pad(mi)+'</div><div class="cap">min</div></div>' +
+    '<div class="unit"><div class="num">'+pad(s)+'</div><div class="cap">sec</div></div>';
+}
+
+function renderStandings(){
+  for (const [key, t] of Object.entries(TEAMS)){
+    const tb = document.querySelector('[data-st="'+key+'"]');
+    const noteEl = document.querySelector('[data-note="'+key+'"]');
+    if (!tb) continue;
+    const played = t.standings.some(x => x.p > 0);
+    const rows = [...t.standings];
+    if (played) rows.sort((a,b)=> b.pts-a.pts || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf);
+    tb.innerHTML = "";
+    rows.forEach(x => {
+      const gd = x.gf - x.ga;
+      const tr = document.createElement("tr");
+      if (x.me) tr.className = "me";
+      tr.innerHTML = '<td class="team">'+x.team+'</td><td>'+x.p+'</td><td>'+x.w+'</td><td>'+x.d+'</td><td>'+x.l+'</td>'+
+        '<td>'+x.gf+'</td><td>'+x.ga+'</td><td>'+(gd>0?'+':'')+gd+'</td><td><strong>'+x.pts+'</strong></td>';
+      tb.appendChild(tr);
+    });
+    if (noteEl) noteEl.textContent = played
+      ? "Top 2 advance, plus 8 best third-placed across all groups."
+      : "No matches played yet — updates as results come in. Top 2 advance (+ best thirds).";
+  }
+}
+
+function renderKey(){
+  const el = document.getElementById("timeline");
+  el.innerHTML = "";
+  KEY.forEach(k => {
+    const row = document.createElement("div");
+    row.className = "tl" + (k.big ? " big" : "");
+    row.innerHTML = '<div class="when">'+k.when+'</div>'+
+      '<div class="what"><strong>'+k.what+'</strong>'+(k.det?' <span class="det">— '+k.det+'</span>':'')+'</div>';
+    el.appendChild(row);
+  });
+}
+
+function renderNews(){
+  const el = document.getElementById("news");
+  el.innerHTML = "";
+  if (!NEWS.length){
+    el.innerHTML = '<div class="item" style="color:var(--muted)">Headlines will appear here during the tournament.</div>';
+    return;
+  }
+  NEWS.forEach(n => {
+    const item = document.createElement("div");
+    item.className = "item";
+    const dt = n.date ? '<span class="d">'+n.date+'</span>' : '';
+    item.innerHTML = dt + n.text;
+    el.appendChild(item);
+  });
+}
+renderFixtures();
+renderStandings();
+renderKey();
+renderNews();
+renderHero();
+setInterval(() => { renderHero(); renderFixtures(); }, 1000);
+</script>
+<!-- WC-GROUPS-JS:START -->
+<script>
+(function(){
+  const WC = {"stamp": "2026-06-07 18:46", "teams": {"MEX": {"name": "Mexico", "flag": "🇲🇽", "rank": 15, "grp": "A"}, "RSA": {"name": "South Africa", "flag": "🇿🇦", "rank": 60, "grp": "A"}, "KOR": {"name": "South Korea", "flag": "🇰🇷", "rank": 25, "grp": "A"}, "CZE": {"name": "Czechia", "flag": "🇨🇿", "rank": 41, "grp": "A"}, "CAN": {"name": "Canada", "flag": "🇨🇦", "rank": 30, "grp": "B"}, "BIH": {"name": "Bosnia & Herzegovina", "flag": "🇧🇦", "rank": 52, "grp": "B"}, "QAT": {"name": "Qatar", "flag": "🇶🇦", "rank": 35, "grp": "B"}, "SUI": {"name": "Switzerland", "flag": "🇨🇭", "rank": 19, "grp": "B"}, "BRA": {"name": "Brazil", "flag": "🇧🇷", "rank": 6, "grp": "C"}, "MAR": {"name": "Morocco", "flag": "🇲🇦", "rank": 8, "grp": "C"}, "HAI": {"name": "Haiti", "flag": "🇭🇹", "rank": 83, "grp": "C"}, "SCO": {"name": "Scotland", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "rank": 47, "grp": "C"}, "USA": {"name": "United States", "flag": "🇺🇸", "rank": 16, "grp": "D"}, "PAR": {"name": "Paraguay", "flag": "🇵🇾", "rank": 64, "grp": "D"}, "AUS": {"name": "Australia", "flag": "🇦🇺", "rank": 26, "grp": "D"}, "TUR": {"name": "Türkiye", "flag": "🇹🇷", "rank": 42, "grp": "D"}, "GER": {"name": "Germany", "flag": "🇩🇪", "rank": 10, "grp": "E"}, "CUW": {"name": "Curaçao", "flag": "🇨🇼", "rank": 81, "grp": "E"}, "CIV": {"name": "Ivory Coast", "flag": "🇨🇮", "rank": 33, "grp": "E"}, "ECU": {"name": "Ecuador", "flag": "🇪🇨", "rank": 24, "grp": "E"}, "NED": {"name": "Netherlands", "flag": "🇳🇱", "rank": 7, "grp": "F"}, "JPN": {"name": "Japan", "flag": "🇯🇵", "rank": 18, "grp": "F"}, "SWE": {"name": "Sweden", "flag": "🇸🇪", "rank": 39, "grp": "F"}, "TUN": {"name": "Tunisia", "flag": "🇹🇳", "rank": 40, "grp": "F"}, "BEL": {"name": "Belgium", "flag": "🇧🇪", "rank": 9, "grp": "G"}, "EGY": {"name": "Egypt", "flag": "🇪🇬", "rank": 29, "grp": "G"}, "IRN": {"name": "Iran", "flag": "🇮🇷", "rank": 21, "grp": "G"}, "NZL": {"name": "New Zealand", "flag": "🇳🇿", "rank": 95, "grp": "G"}, "ESP": {"name": "Spain", "flag": "🇪🇸", "rank": 2, "grp": "H"}, "CPV": {"name": "Cape Verde", "flag": "🇨🇻", "rank": 70, "grp": "H"}, "KSA": {"name": "Saudi Arabia", "flag": "🇸🇦", "rank": 57, "grp": "H"}, "URU": {"name": "Uruguay", "flag": "🇺🇾", "rank": 17, "grp": "H"}, "FRA": {"name": "France", "flag": "🇫🇷", "rank": 1, "grp": "I"}, "SEN": {"name": "Senegal", "flag": "🇸🇳", "rank": 14, "grp": "I"}, "IRQ": {"name": "Iraq", "flag": "🇮🇶", "rank": 61, "grp": "I"}, "NOR": {"name": "Norway", "flag": "🇳🇴", "rank": 44, "grp": "I"}, "ARG": {"name": "Argentina", "flag": "🇦🇷", "rank": 3, "grp": "J"}, "ALG": {"name": "Algeria", "flag": "🇩🇿", "rank": 36, "grp": "J"}, "AUT": {"name": "Austria", "flag": "🇦🇹", "rank": 23, "grp": "J"}, "JOR": {"name": "Jordan", "flag": "🇯🇴", "rank": 68, "grp": "J"}, "POR": {"name": "Portugal", "flag": "🇵🇹", "rank": 5, "grp": "K"}, "COD": {"name": "DR Congo", "flag": "🇨🇩", "rank": 51, "grp": "K"}, "UZB": {"name": "Uzbekistan", "flag": "🇺🇿", "rank": 62, "grp": "K"}, "COL": {"name": "Colombia", "flag": "🇨🇴", "rank": 13, "grp": "K"}, "ENG": {"name": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "rank": 4, "grp": "L"}, "CRO": {"name": "Croatia", "flag": "🇭🇷", "rank": 11, "grp": "L"}, "GHA": {"name": "Ghana", "flag": "🇬🇭", "rank": 65, "grp": "L"}, "PAN": {"name": "Panama", "flag": "🇵🇦", "rank": 53, "grp": "L"}}, "groups": {"A": ["MEX", "KOR", "CZE", "RSA"], "B": ["SUI", "CAN", "QAT", "BIH"], "C": ["BRA", "MAR", "SCO", "HAI"], "D": ["USA", "AUS", "TUR", "PAR"], "E": ["GER", "ECU", "CIV", "CUW"], "F": ["NED", "JPN", "SWE", "TUN"], "G": ["BEL", "IRN", "EGY", "NZL"], "H": ["ESP", "URU", "KSA", "CPV"], "I": ["FRA", "SEN", "NOR", "IRQ"], "J": ["ARG", "AUT", "ALG", "JOR"], "K": ["POR", "COL", "COD", "UZB"], "L": ["ENG", "CRO", "PAN", "GHA"]}, "titleOdds": {"ESP": 0.1615, "NZL": 0.0005, "SUI": 0.0125, "ENG": 0.1115, "FRA": 0.1615, "KOR": 0.0035, "HAI": 0.0005, "BRA": 0.0825, "JOR": 0.0005, "CUW": 0.0005, "ARG": 0.0885, "GER": 0.0565, "COL": 0.0175, "IRN": 0.0015, "POR": 0.0965, "GHA": 0.0015, "NED": 0.0395, "ALG": 0.0015, "BIH": 0.0015, "USA": 0.0115, "CAN": 0.0035, "TUR": 0.0135, "URU": 0.0105, "MEX": 0.0135, "PAR": 0.0025, "SCO": 0.0025, "JPN": 0.0195, "NOR": 0.0265, "TUN": 0.0005, "ECU": 0.0085, "UZB": 0.0005, "MAR": 0.0155, "PAN": 0.0005, "IRQ": 0.0005, "RSA": 0.0005, "SEN": 0.0065, "CIV": 0.0045, "COD": 0.0015, "CPV": 0.0005, "CZE": 0.0025, "QAT": 0.0005, "BEL": 0.0195, "AUS": 0.0015, "KSA": 0.0005, "AUT": 0.0045, "CRO": 0.0095, "EGY": 0.0025, "SWE": 0.0045}, "matches": [{"a": "KOR", "b": "CZE", "pa": 0.365, "pd": 0.315, "pb": 0.335, "date": "2026-06-11"}, {"a": "MEX", "b": "RSA", "pa": 0.685, "pd": 0.205, "pb": 0.105, "date": "2026-06-11"}, {"a": "CAN", "b": "BIH", "pa": 0.535, "pd": 0.265, "pb": 0.205, "date": "2026-06-12"}, {"a": "USA", "b": "PAR", "pa": 0.495, "pd": 0.285, "pb": 0.235, "date": "2026-06-12"}, {"a": "BRA", "b": "MAR", "pa": 0.605, "pd": 0.245, "pb": 0.165, "date": "2026-06-13"}, {"a": "HAI", "b": "SCO", "pa": 0.145, "pd": 0.215, "pb": 0.65, "date": "2026-06-13"}, {"a": "QAT", "b": "SUI", "pa": 0.067, "pd": 0.135, "pb": 0.795, "date": "2026-06-13"}, {"a": "AUS", "b": "TUR", "pa": 0.185, "pd": 0.265, "pb": 0.555, "date": "2026-06-14"}, {"a": "CIV", "b": "ECU", "pa": 0.265, "pd": 0.335, "pb": 0.395, "date": "2026-06-14"}, {"a": "GER", "b": "CUW", "pa": 0.9435, "pd": 0.0405, "pb": 0.0195, "date": "2026-06-14"}, {"a": "NED", "b": "JPN", "pa": 0.485, "pd": 0.255, "pb": 0.26, "date": "2026-06-14"}, {"a": "SWE", "b": "TUN", "pa": 0.505, "pd": 0.285, "pb": 0.225, "date": "2026-06-14"}, {"a": "BEL", "b": "EGY", "pa": 0.585, "pd": 0.245, "pb": 0.175, "date": "2026-06-15"}, {"a": "ESP", "b": "CPV", "pa": 0.895, "pd": 0.074, "pb": 0.0335, "date": "2026-06-15"}, {"a": "IRN", "b": "NZL", "pa": 0.495, "pd": 0.285, "pb": 0.215, "date": "2026-06-15"}, {"a": "KSA", "b": "URU", "pa": 0.125, "pd": 0.215, "pb": 0.665, "date": "2026-06-15"}, {"a": "ARG", "b": "ALG", "pa": 0.705, "pd": 0.205, "pb": 0.095, "date": "2026-06-16"}, {"a": "FRA", "b": "SEN", "pa": 0.675, "pd": 0.205, "pb": 0.125, "date": "2026-06-16"}, {"a": "IRQ", "b": "NOR", "pa": 0.065, "pd": 0.135, "pb": 0.805, "date": "2026-06-16"}, {"a": "AUT", "b": "JOR", "pa": 0.735, "pd": 0.165, "pb": 0.095, "date": "2026-06-17"}, {"a": "ENG", "b": "CRO", "pa": 0.565, "pd": 0.255, "pb": 0.195, "date": "2026-06-17"}, {"a": "GHA", "b": "PAN", "pa": 0.465, "pd": 0.275, "pb": 0.265, "date": "2026-06-17"}, {"a": "POR", "b": "COD", "pa": 0.765, "pd": 0.165, "pb": 0.075, "date": "2026-06-17"}, {"a": "UZB", "b": "COL", "pa": 0.105, "pd": 0.205, "pb": 0.695, "date": "2026-06-17"}, {"a": "CAN", "b": "QAT", "pa": 0.735, "pd": 0.175, "pb": 0.095, "date": "2026-06-18"}, {"a": "CZE", "b": "RSA", "pa": 0.495, "pd": 0.285, "pb": 0.225, "date": "2026-06-18"}, {"a": "MEX", "b": "KOR", "pa": 0.535, "pd": 0.275, "pb": 0.195, "date": "2026-06-18"}, {"a": "SUI", "b": "BIH", "pa": 0.615, "pd": 0.235, "pb": 0.165, "date": "2026-06-18"}, {"a": "BRA", "b": "HAI", "pa": 0.915, "pd": 0.0625, "pb": 0.0285, "date": "2026-06-19"}, {"a": "SCO", "b": "MAR", "pa": 0.225, "pd": 0.285, "pb": 0.505, "date": "2026-06-19"}, {"a": "TUR", "b": "PAR", "pa": 0.435, "pd": 0.305, "pb": 0.275, "date": "2026-06-19"}, {"a": "USA", "b": "AUS", "pa": 0.555, "pd": 0.245, "pb": 0.215, "date": "2026-06-19"}, {"a": "ECU", "b": "CUW", "pa": 0.815, "pd": 0.125, "pb": 0.0585, "date": "2026-06-20"}, {"a": "GER", "b": "CIV", "pa": 0.635, "pd": 0.205, "pb": 0.165, "date": "2026-06-20"}, {"a": "NED", "b": "SWE", "pa": 0.605, "pd": 0.235, "pb": 0.175, "date": "2026-06-20"}, {"a": "BEL", "b": "IRN", "pa": 0.695, "pd": 0.2, "pb": 0.115, "date": "2026-06-21"}, {"a": "ESP", "b": "KSA", "pa": 0.875, "pd": 0.085, "pb": 0.0355, "date": "2026-06-21"}, {"a": "NZL", "b": "EGY", "pa": 0.195, "pd": 0.255, "pb": 0.555, "date": "2026-06-21"}, {"a": "TUN", "b": "JPN", "pa": 0.175, "pd": 0.275, "pb": 0.565, "date": "2026-06-21"}, {"a": "URU", "b": "CPV", "pa": 0.685, "pd": 0.205, "pb": 0.115, "date": "2026-06-21"}, {"a": "ARG", "b": "AUT", "pa": 0.605, "pd": 0.24, "pb": 0.165, "date": "2026-06-22"}, {"a": "FRA", "b": "IRQ", "pa": 0.865, "pd": 0.095, "pb": 0.0375, "date": "2026-06-22"}, {"a": "JOR", "b": "ALG", "pa": 0.165, "pd": 0.235, "pb": 0.605, "date": "2026-06-22"}, {"a": "NOR", "b": "SEN", "pa": 0.465, "pd": 0.275, "pb": 0.275, "date": "2026-06-22"}, {"a": "COL", "b": "COD", "pa": 0.665, "pd": 0.225, "pb": 0.115, "date": "2026-06-23"}, {"a": "ENG", "b": "GHA", "pa": 0.735, "pd": 0.165, "pb": 0.095, "date": "2026-06-23"}, {"a": "PAN", "b": "CRO", "pa": 0.125, "pd": 0.225, "pb": 0.65, "date": "2026-06-23"}, {"a": "POR", "b": "UZB", "pa": 0.785, "pd": 0.14, "pb": 0.08, "date": "2026-06-23"}, {"a": "BIH", "b": "QAT", "pa": 0.635, "pd": 0.235, "pb": 0.15, "date": "2026-06-24"}, {"a": "CZE", "b": "MEX", "pa": 0.21, "pd": 0.27, "pb": 0.525, "date": "2026-06-24"}, {"a": "MAR", "b": "HAI", "pa": 0.725, "pd": 0.185, "pb": 0.1, "date": "2026-06-24"}, {"a": "RSA", "b": "KOR", "pa": 0.24, "pd": 0.275, "pb": 0.5, "date": "2026-06-24"}, {"a": "SCO", "b": "BRA", "pa": 0.14, "pd": 0.195, "pb": 0.665, "date": "2026-06-24"}, {"a": "SUI", "b": "CAN", "pa": 0.445, "pd": 0.295, "pb": 0.27, "date": "2026-06-24"}, {"a": "CUW", "b": "CIV", "pa": 0.075, "pd": 0.15, "pb": 0.785, "date": "2026-06-25"}, {"a": "ECU", "b": "GER", "pa": 0.2, "pd": 0.25, "pb": 0.58, "date": "2026-06-25"}, {"a": "JPN", "b": "SWE", "pa": 0.475, "pd": 0.285, "pb": 0.255, "date": "2026-06-25"}, {"a": "PAR", "b": "AUS", "pa": 0.445, "pd": 0.305, "pb": 0.265, "date": "2026-06-25"}, {"a": "TUN", "b": "NED", "pa": 0.14, "pd": 0.22, "pb": 0.665, "date": "2026-06-25"}, {"a": "TUR", "b": "USA", "pa": 0.365, "pd": 0.285, "pb": 0.37, "date": "2026-06-25"}, {"a": "CPV", "b": "KSA", "pa": 0.375, "pd": 0.29, "pb": 0.355, "date": "2026-06-26"}, {"a": "EGY", "b": "IRN", "pa": 0.42, "pd": 0.325, "pb": 0.27, "date": "2026-06-26"}, {"a": "NOR", "b": "FRA", "pa": 0.22, "pd": 0.265, "pb": 0.535, "date": "2026-06-26"}, {"a": "NZL", "b": "BEL", "pa": 0.09, "pd": 0.155, "pb": 0.755, "date": "2026-06-26"}, {"a": "SEN", "b": "IRQ", "pa": 0.675, "pd": 0.21, "pb": 0.125, "date": "2026-06-26"}, {"a": "URU", "b": "ESP", "pa": 0.17, "pd": 0.245, "pb": 0.61, "date": "2026-06-26"}, {"a": "ALG", "b": "AUT", "pa": 0.29, "pd": 0.295, "pb": 0.42, "date": "2026-06-27"}, {"a": "COD", "b": "UZB", "pa": 0.425, "pd": 0.295, "pb": 0.295, "date": "2026-06-27"}, {"a": "COL", "b": "POR", "pa": 0.285, "pd": 0.28, "pb": 0.46, "date": "2026-06-27"}, {"a": "CRO", "b": "GHA", "pa": 0.585, "pd": 0.265, "pb": 0.17, "date": "2026-06-27"}, {"a": "JOR", "b": "ARG", "pa": 0.063, "pd": 0.12, "pb": 0.815, "date": "2026-06-27"}, {"a": "PAN", "b": "ENG", "pa": 0.095, "pd": 0.155, "pb": 0.755, "date": "2026-06-27"}], "aliases": {"south korea": "KOR", "korea republic": "KOR", "turkiye": "TUR", "türkiye": "TUR", "turkey": "TUR", "ivory coast": "CIV", "cote d'ivoire": "CIV", "côte d'ivoire": "CIV", "iran": "IRN", "ir iran": "IRN", "cape verde": "CPV", "cabo verde": "CPV", "dr congo": "COD", "congo dr": "COD", "bosnia & herzegovina": "BIH", "bosnia and herzegovina": "BIH", "bosnia-herzegovina": "BIH", "usa": "USA", "united states": "USA", "mexico": "MEX", "south africa": "RSA", "czechia": "CZE", "canada": "CAN", "qatar": "QAT", "switzerland": "SUI", "brazil": "BRA", "morocco": "MAR", "haiti": "HAI", "scotland": "SCO", "paraguay": "PAR", "australia": "AUS", "germany": "GER", "curaçao": "CUW", "ecuador": "ECU", "netherlands": "NED", "japan": "JPN", "sweden": "SWE", "tunisia": "TUN", "belgium": "BEL", "egypt": "EGY", "new zealand": "NZL", "spain": "ESP", "saudi arabia": "KSA", "uruguay": "URU", "france": "FRA", "senegal": "SEN", "iraq": "IRQ", "norway": "NOR", "argentina": "ARG", "algeria": "ALG", "austria": "AUT", "jordan": "JOR", "portugal": "POR", "uzbekistan": "UZB", "colombia": "COL", "england": "ENG", "croatia": "CRO", "ghana": "GHA", "panama": "PAN"}};
+  const T = WC.teams, GROUPS = WC.groups;
+  const MY = {AUS:1, ENG:1};
+  const GAMMA = "https://gamma-api.polymarket.com/events?closed=false&limit=500&tag_slug=fifa-world-cup";
+  const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let titleOdds = Object.assign({}, WC.titleOdds);
+  let matchMap = {};
+  WC.matches.forEach(m => matchMap[[m.a,m.b].sort().join("|")] = m);
+
+  const NORM = s => (s||"").toLowerCase().replace(/[^a-z]/g,"");
+  const aliasIdx = {};
+  for (const [k,v] of Object.entries(WC.aliases)) aliasIdx[NORM(k)] = v;
+  for (const c of Object.keys(T)) aliasIdx[NORM(T[c].name)] = c;
+  const toCode = n => { const k=NORM(n); return aliasIdx[k] || null; };
+
+  const pct = x => x==null ? "–" : (x*100>=9.5 ? Math.round(x*100) : (x*100).toFixed(1).replace(/\.0$/,""))+"";
+  const dmon = d => { if(!d) return ""; const p=d.split("-"); return parseInt(p[2],10)+" "+MONTHS[parseInt(p[1],10)-1]; };
+
+  function renderLead(){
+    const el = document.getElementById("wc-lead"); if(!el) return;
+    const rows = Object.keys(T).map(c => ({c, o: titleOdds[c]!=null?titleOdds[c]:0}))
+      .sort((a,b)=> b.o-a.o);
+    const max = rows[0].o || 1;
+    el.innerHTML = rows.map((r,i)=>{
+      const t=T[r.c], me=MY[r.c]?" me":"";
+      const w = Math.max(2, Math.round(r.o/max*100));
+      return '<div class="row'+me+'"><span class="fill" style="width:'+w+'%"></span>'+
+        '<span class="pos">'+(i+1)+'</span><span class="fl">'+t.flag+'</span>'+
+        '<span class="nm">'+t.name+'</span><span class="od">'+(r.o>0?pct(r.o)+"%":"—")+'</span></div>';
+    }).join("");
+  }
+
+  function fxBar(m){
+    // orient by stored a/b
+    const a=m.a, b=m.b;
+    const pa=m.pa, pd=m.pd, pb=m.pb;
+    const seg=(cls,p)=> '<i class="'+cls+'" style="width:'+Math.max(0,(p||0)*100)+'%">'+((p||0)>=0.12?pct(p):"")+'</i>';
+    return '<div class="fxr">'+
+      '<div class="ln"><span class="s">'+T[a].flag+' '+a+'</span><span class="vs">v</span>'+
+        '<span class="s">'+b+' '+T[b].flag+'</span><span class="dt">'+dmon(m.date)+'</span></div>'+
+      '<div class="bar">'+seg("a",pa)+seg("d",pd)+seg("b",pb)+'</div></div>';
+  }
+
+  function renderGroups(){
+    const el = document.getElementById("wc-grps"); if(!el) return;
+    let html="";
+    for (const g of Object.keys(GROUPS)){
+      const codes = GROUPS[g].slice().sort((a,b)=> (titleOdds[b]||0)-(titleOdds[a]||0) || T[a].rank-T[b].rank);
+      const isMe = codes.some(c=>MY[c]);
+      const fav = codes[0];
+      // group fixtures (all pairs within group)
+      const fx=[];
+      for(let i=0;i<codes.length;i++) for(let j=i+1;j<codes.length;j++){
+        const m = matchMap[[codes[i],codes[j]].sort().join("|")];
+        if(m) fx.push(m);
+      }
+      fx.sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+      html += '<div class="grp'+(isMe?' me':'')+'">'+
+        '<div class="gh"><span class="lt">Group '+g+'</span>'+
+          '<span class="fav">fav <b>'+T[fav].flag+' '+T[fav].name+'</b></span></div>'+
+        '<table class="gtbl"><thead><tr><th class="l">Team</th><th>FIFA</th><th>Win cup</th></tr></thead><tbody>'+
+        codes.map(c=>{const t=T[c];return '<tr'+(MY[c]?' class="me"':'')+'>'+
+          '<td class="tm">'+t.flag+' '+t.name+'</td><td class="rk">#'+t.rank+'</td>'+
+          '<td class="od">'+(titleOdds[c]>0?pct(titleOdds[c])+"%":"—")+'</td></tr>';}).join("")+
+        '</tbody></table>'+
+        '<div class="fxlist"><span class="h">Fixtures — Polymarket odds</span>'+
+          fx.map(fxBar).join("")+'</div></div>';
+    }
+    el.innerHTML = html;
+  }
+
+  function setMeta(live){
+    const bar=document.getElementById("wc-oddsbar"), meta=document.getElementById("wc-oddsmeta");
+    if(!meta) return;
+    if(live){ bar.classList.remove("stale"); meta.textContent="live odds · updated "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}); }
+    else { bar.classList.add("stale"); meta.textContent="snapshot "+WC.stamp+" (live fetch unavailable)"; }
+  }
+
+  async function refresh(){
+    const meta=document.getElementById("wc-oddsmeta"); if(meta) meta.textContent="refreshing…";
+    try{
+      const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),9000);
+      const res=await fetch(GAMMA,{signal:ctrl.signal,cache:"no-store"}); clearTimeout(to);
+      if(!res.ok) throw new Error("http "+res.status);
+      const evs=await res.json();
+      const nt={}, nm={};
+      for(const e of evs){
+        const t=(e.title||"").trim();
+        if(t.toLowerCase().startsWith("world cup winner")){
+          for(const m of (e.markets||[])){
+            const c=toCode(m.groupItemTitle); let y=null;
+            try{ y=m.outcomePrices?parseFloat(JSON.parse(m.outcomePrices)[0]):null; }catch(_){}
+            if(c&&y>0) nt[c]=y;
+          }
+          continue;
+        }
+        if(!/ vs/i.test(t)) continue;
+        const parts=t.replace(/ vs\. /," vs ").split(" vs ");
+        if(parts.length!==2) continue;
+        const ca=toCode(parts[0]), cb=toCode(parts[1]); if(!ca||!cb) continue;
+        let pa=null,pd=null,pb=null,date=null;
+        for(const m of (e.markets||[])){
+          const gi=m.groupItemTitle||""; let y=null;
+          try{ y=m.outcomePrices?parseFloat(JSON.parse(m.outcomePrices)[0]):null; }catch(_){}
+          const dm=(m.question||"").match(/(\d{4}-\d{2}-\d{2})/); if(dm) date=dm[1];
+          if(gi.toLowerCase().startsWith("draw")) pd=y;
+          else if(toCode(gi)===ca) pa=y; else if(toCode(gi)===cb) pb=y;
+        }
+        nm[[ca,cb].sort().join("|")]={a:ca,b:cb,pa,pd,pb,date};
+      }
+      if(Object.keys(nt).length) titleOdds=nt;
+      if(Object.keys(nm).length) matchMap=nm;
+      renderLead(); renderGroups(); setMeta(true);
+    }catch(e){ setMeta(false); }
+  }
+
+  renderLead(); renderGroups(); setMeta(false);
+  const btn=document.getElementById("wc-refresh"); if(btn) btn.addEventListener("click",refresh);
+  refresh();
+})();
+</script>
+<!-- WC-GROUPS-JS:END -->
+
+</body>
+</html>
