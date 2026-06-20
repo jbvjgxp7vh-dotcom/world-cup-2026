@@ -1,0 +1,41 @@
+name: refresh-results
+
+# Keeps world-cup-results.json current by re-scraping Wikipedia. Runs on a
+# schedule (GitHub may delay/batch scheduled runs by a few minutes) and can be
+# triggered manually from the Actions tab. Commits ONLY when a score changed.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"     # every ~10 min during the tournament
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-results
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet lxml
+      - name: Refresh results
+        run: python3 refresh-wc-results.py --out world-cup-results.json --quiet
+      - name: Commit if changed
+        run: |
+          if ! git diff --quiet -- world-cup-results.json; then
+            git config user.name  "jbvjgxp7vh-dotcom"
+            git config user.email "jbvjgxp7vh-dotcom@users.noreply.github.com"
+            git add world-cup-results.json
+            git commit -m "refresh results [skip ci]"
+            git push
+            echo "results updated"
+          else
+            echo "no change"
+          fi
