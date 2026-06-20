@@ -5,6 +5,7 @@
 <title>World Cup 2026 · Tracker</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
+
 <style>
 :root {
   --bg: #0b0d10; --panel: #12161c; --panel-2: #1a1f27;
@@ -115,7 +116,6 @@ footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px
   <span class="meta">Following 🇦🇺 Australia · 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England · all 12 groups + live Polymarket odds · 11 Jun – 19 Jul</span>
 </header>
 
-<!-- Live next-match countdown (soonest across followed teams) -->
 <div class="hero" id="hero">
   <div class="label">Next match — your teams</div>
   <div class="match" id="hero-match">—</div>
@@ -137,7 +137,6 @@ footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px
   <div class="note" data-note="ENG"></div>
 </div>
 
-<!-- All 12 groups + title odds -->
 <style>
   .wc-odds-bar{display:flex;align-items:center;gap:8px;margin:2px 24px 0;color:var(--muted);font-size:11px}
   .wc-odds-bar .dot{width:7px;height:7px;border-radius:99px;background:var(--green);box-shadow:0 0 6px var(--green)}
@@ -183,6 +182,17 @@ footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px
   .fxr .bar i.a{background:var(--accent)}
   .fxr .bar i.d{background:#5b6573;color:var(--text)}
   .fxr .bar i.b{background:var(--accent-2);color:#fff}
+  /* Live standings + scorelines (overlaid from world-cup-results.json) */
+  .gtbl td.pts{color:var(--gold);font-weight:800}
+  .gtbl tr.q td.tm{box-shadow:inset 3px 0 0 var(--green)}
+  .gtbl tr.q.me td.tm{box-shadow:inset 3px 0 0 var(--gold)}
+  .grp .gh .fav b.lead{color:var(--gold)}
+  .fxr .ln .sc{font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;padding:0 3px}
+  .fxr .ln .s.win{color:var(--green)}
+  .fxr .ln .rb{margin-left:auto;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:99px;white-space:nowrap}
+  .fxr .ln .rb.ft{background:rgba(38,208,124,.14);color:var(--green)}
+  .fxr .ln .rb.live{background:rgba(239,71,111,.16);color:var(--red);animation:pulse 1.4s infinite}
+  .fxr .ln .rb.next{background:rgba(255,205,0,.16);color:var(--gold)}
   @media(max-width:600px){.wc-odds-bar{margin:2px 16px 0}}
 </style>
 
@@ -197,11 +207,10 @@ footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px
 </div>
 
 <div class="section">
-  <h2>📊 All 12 Groups <span class="sub">FIFA rank · title odds · live match odds (win / draw / win)</span></h2>
+  <h2>📊 All 12 Groups <span class="sub">live scores + standings · Polymarket odds before kickoff<span id="wc-resmeta"></span></span></h2>
   <div class="grps" id="wc-grps"></div>
-  <div class="note">Top 2 of each group advance to the Round of 32, plus the 8 best third-placed teams. Match bars are Polymarket 1X2 prices (left team win · draw · right team win). 🇦🇺 Australia (D) &amp; 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England (L) highlighted.</div>
+  <div class="note">Once a group has results, each card shows the live table (top 2 advance to the Round of 32, plus the 8 best third-placed teams — green bar = current top 2). Played games show the scoreline (<b>FT</b>/<b>● LIVE</b>); games still to come show Polymarket 1X2 odds (left win · draw · right win). Standings tiebreak: points → goal difference → goals for. 🇦🇺 Australia (D) &amp; 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England (L) highlighted.</div>
 </div>
-<!-- WC-GROUPS:END -->
 
 <div class="section">
   <h2>⭐ Key Matches <span class="sub">tournament milestones (AEST where timed)</span></h2>
@@ -225,14 +234,10 @@ footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px
 </div>
 
 <footer>
-  Fixtures final as of 3 Jun 2026 · countdown uses your device clock.
-  Title &amp; per-match odds: <strong>Polymarket</strong> — fetched live in your browser each load,
-  with a snapshot fallback if the live feed is unavailable. FIFA rankings current 2026.
-  Unofficial fan page · not affiliated with FIFA.
+  FIFA World Cup 2026 · 11 Jun – 19 Jul 2026. Live scores &amp; standings update automatically as results come in; pre-match games show <strong>Polymarket</strong> 1X2 odds. Countdown uses your device clock.
 </footer>
 
 <script>
-// ---- Tournament data. AEST = UTC+10, no DST. ----
 const TEAMS = {
   AUS: {
     name: "Australia", flag: "🇦🇺",
@@ -265,7 +270,6 @@ const TEAMS = {
 };
 const MATCH_MS = 2 * 60 * 60 * 1000; // ~2h "LIVE" window
 
-// Key matches / knockout timeline (static milestones).
 const KEY = [
   { when:"Thu 11 Jun",            what:"Opening match",      det:"Mexico v South Africa · Estadio Azteca" },
   { when:"11–27 Jun",             what:"Group stage",        det:"72 matches · 12 groups" },
@@ -277,7 +281,6 @@ const KEY = [
   { when:"Mon 20 Jul, 5am AEST",  what:"FINAL",              det:"MetLife Stadium, NY/NJ (Sun 19 Jul, 3pm EDT)", big:true },
 ];
 
-// Top-teams news (overlaid from the tracker note at load).
 let NEWS = [];
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -389,7 +392,7 @@ function renderNews(){
   const el = document.getElementById("news");
   el.innerHTML = "";
   if (!NEWS.length){
-    el.innerHTML = '<div class="item" style="color:var(--muted)">Headlines will appear here during the tournament.</div>';
+    el.innerHTML = '<div class="item" style="color:var(--muted)">Headlines appear here once the tournament is underway.</div>';
     return;
   }
   NEWS.forEach(n => {
@@ -400,24 +403,65 @@ function renderNews(){
     el.appendChild(item);
   });
 }
+
+async function loadFromResults(){
+  try {
+    const res = await fetch('world-cup-results.json', { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const N2C = {unitedstates:"USA",usa:"USA",australia:"AUS",trkiye:"TUR",turkiye:"TUR",turkey:"TUR",paraguay:"PAR",england:"ENG",croatia:"CRO",ghana:"GHA",panama:"PAN"};
+    const norm = s => (s||"").toLowerCase().replace(/[^a-z]/g,"");
+    const GRP = { AUS:["USA","AUS","TUR","PAR"], ENG:["ENG","CRO","GHA","PAN"] };
+    const R = {};
+    (data.matches||[]).forEach(m => { if(m.status==="FINISHED" && m.ha!=null && m.hb!=null) R[[m.a,m.b].sort().join("|")] = {home:m.a,away:m.b,ha:+m.ha,hb:+m.hb}; });
+    let changed = false;
+    for (const [key, t] of Object.entries(TEAMS)){
+      const codes = GRP[key]; if(!codes) continue;
+      const tab = {}; codes.forEach(c => tab[c] = {p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});
+      for(let i=0;i<codes.length;i++) for(let j=i+1;j<codes.length;j++){
+        const r = R[[codes[i],codes[j]].sort().join("|")]; if(!r) continue;
+        const H=tab[r.home], A=tab[r.away]; if(!H||!A) continue;
+        H.p++; A.p++; H.gf+=r.ha; H.ga+=r.hb; A.gf+=r.hb; A.ga+=r.ha;
+        if(r.ha>r.hb){ H.w++; A.l++; H.pts+=3; }
+        else if(r.ha<r.hb){ A.w++; H.l++; A.pts+=3; }
+        else { H.d++; A.d++; H.pts++; A.pts++; }
+      }
+      t.standings.forEach(s => { const c = N2C[norm(s.team)]; if(c && tab[c]){ Object.assign(s, tab[c]); changed = true; } });
+      t.matches.forEach(m => {
+        const oc = N2C[norm(m.opp)]; if(!oc) return;
+        const r = R[[key,oc].sort().join("|")]; if(!r) return;
+        m.fin = true;
+        if(r.home===key){ m.ours=r.ha; m.theirs=r.hb; } else { m.ours=r.hb; m.theirs=r.ha; }
+        changed = true;
+      });
+    }
+    if(changed){ renderStandings(); renderFixtures(); renderHero(); }
+  } catch (e) { /* offline / 404 — keep baseline */ }
+}
+
 renderFixtures();
 renderStandings();
 renderKey();
 renderNews();
 renderHero();
+loadFromResults();
+setInterval(loadFromResults, 120000);
 setInterval(() => { renderHero(); renderFixtures(); }, 1000);
 </script>
-<!-- WC-GROUPS-JS:START -->
+
 <script>
 (function(){
-  const WC = {"stamp": "2026-06-07 18:46", "teams": {"MEX": {"name": "Mexico", "flag": "🇲🇽", "rank": 15, "grp": "A"}, "RSA": {"name": "South Africa", "flag": "🇿🇦", "rank": 60, "grp": "A"}, "KOR": {"name": "South Korea", "flag": "🇰🇷", "rank": 25, "grp": "A"}, "CZE": {"name": "Czechia", "flag": "🇨🇿", "rank": 41, "grp": "A"}, "CAN": {"name": "Canada", "flag": "🇨🇦", "rank": 30, "grp": "B"}, "BIH": {"name": "Bosnia & Herzegovina", "flag": "🇧🇦", "rank": 52, "grp": "B"}, "QAT": {"name": "Qatar", "flag": "🇶🇦", "rank": 35, "grp": "B"}, "SUI": {"name": "Switzerland", "flag": "🇨🇭", "rank": 19, "grp": "B"}, "BRA": {"name": "Brazil", "flag": "🇧🇷", "rank": 6, "grp": "C"}, "MAR": {"name": "Morocco", "flag": "🇲🇦", "rank": 8, "grp": "C"}, "HAI": {"name": "Haiti", "flag": "🇭🇹", "rank": 83, "grp": "C"}, "SCO": {"name": "Scotland", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "rank": 47, "grp": "C"}, "USA": {"name": "United States", "flag": "🇺🇸", "rank": 16, "grp": "D"}, "PAR": {"name": "Paraguay", "flag": "🇵🇾", "rank": 64, "grp": "D"}, "AUS": {"name": "Australia", "flag": "🇦🇺", "rank": 26, "grp": "D"}, "TUR": {"name": "Türkiye", "flag": "🇹🇷", "rank": 42, "grp": "D"}, "GER": {"name": "Germany", "flag": "🇩🇪", "rank": 10, "grp": "E"}, "CUW": {"name": "Curaçao", "flag": "🇨🇼", "rank": 81, "grp": "E"}, "CIV": {"name": "Ivory Coast", "flag": "🇨🇮", "rank": 33, "grp": "E"}, "ECU": {"name": "Ecuador", "flag": "🇪🇨", "rank": 24, "grp": "E"}, "NED": {"name": "Netherlands", "flag": "🇳🇱", "rank": 7, "grp": "F"}, "JPN": {"name": "Japan", "flag": "🇯🇵", "rank": 18, "grp": "F"}, "SWE": {"name": "Sweden", "flag": "🇸🇪", "rank": 39, "grp": "F"}, "TUN": {"name": "Tunisia", "flag": "🇹🇳", "rank": 40, "grp": "F"}, "BEL": {"name": "Belgium", "flag": "🇧🇪", "rank": 9, "grp": "G"}, "EGY": {"name": "Egypt", "flag": "🇪🇬", "rank": 29, "grp": "G"}, "IRN": {"name": "Iran", "flag": "🇮🇷", "rank": 21, "grp": "G"}, "NZL": {"name": "New Zealand", "flag": "🇳🇿", "rank": 95, "grp": "G"}, "ESP": {"name": "Spain", "flag": "🇪🇸", "rank": 2, "grp": "H"}, "CPV": {"name": "Cape Verde", "flag": "🇨🇻", "rank": 70, "grp": "H"}, "KSA": {"name": "Saudi Arabia", "flag": "🇸🇦", "rank": 57, "grp": "H"}, "URU": {"name": "Uruguay", "flag": "🇺🇾", "rank": 17, "grp": "H"}, "FRA": {"name": "France", "flag": "🇫🇷", "rank": 1, "grp": "I"}, "SEN": {"name": "Senegal", "flag": "🇸🇳", "rank": 14, "grp": "I"}, "IRQ": {"name": "Iraq", "flag": "🇮🇶", "rank": 61, "grp": "I"}, "NOR": {"name": "Norway", "flag": "🇳🇴", "rank": 44, "grp": "I"}, "ARG": {"name": "Argentina", "flag": "🇦🇷", "rank": 3, "grp": "J"}, "ALG": {"name": "Algeria", "flag": "🇩🇿", "rank": 36, "grp": "J"}, "AUT": {"name": "Austria", "flag": "🇦🇹", "rank": 23, "grp": "J"}, "JOR": {"name": "Jordan", "flag": "🇯🇴", "rank": 68, "grp": "J"}, "POR": {"name": "Portugal", "flag": "🇵🇹", "rank": 5, "grp": "K"}, "COD": {"name": "DR Congo", "flag": "🇨🇩", "rank": 51, "grp": "K"}, "UZB": {"name": "Uzbekistan", "flag": "🇺🇿", "rank": 62, "grp": "K"}, "COL": {"name": "Colombia", "flag": "🇨🇴", "rank": 13, "grp": "K"}, "ENG": {"name": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "rank": 4, "grp": "L"}, "CRO": {"name": "Croatia", "flag": "🇭🇷", "rank": 11, "grp": "L"}, "GHA": {"name": "Ghana", "flag": "🇬🇭", "rank": 65, "grp": "L"}, "PAN": {"name": "Panama", "flag": "🇵🇦", "rank": 53, "grp": "L"}}, "groups": {"A": ["MEX", "KOR", "CZE", "RSA"], "B": ["SUI", "CAN", "QAT", "BIH"], "C": ["BRA", "MAR", "SCO", "HAI"], "D": ["USA", "AUS", "TUR", "PAR"], "E": ["GER", "ECU", "CIV", "CUW"], "F": ["NED", "JPN", "SWE", "TUN"], "G": ["BEL", "IRN", "EGY", "NZL"], "H": ["ESP", "URU", "KSA", "CPV"], "I": ["FRA", "SEN", "NOR", "IRQ"], "J": ["ARG", "AUT", "ALG", "JOR"], "K": ["POR", "COL", "COD", "UZB"], "L": ["ENG", "CRO", "PAN", "GHA"]}, "titleOdds": {"ESP": 0.1615, "NZL": 0.0005, "SUI": 0.0125, "ENG": 0.1115, "FRA": 0.1615, "KOR": 0.0035, "HAI": 0.0005, "BRA": 0.0825, "JOR": 0.0005, "CUW": 0.0005, "ARG": 0.0885, "GER": 0.0565, "COL": 0.0175, "IRN": 0.0015, "POR": 0.0965, "GHA": 0.0015, "NED": 0.0395, "ALG": 0.0015, "BIH": 0.0015, "USA": 0.0115, "CAN": 0.0035, "TUR": 0.0135, "URU": 0.0105, "MEX": 0.0135, "PAR": 0.0025, "SCO": 0.0025, "JPN": 0.0195, "NOR": 0.0265, "TUN": 0.0005, "ECU": 0.0085, "UZB": 0.0005, "MAR": 0.0155, "PAN": 0.0005, "IRQ": 0.0005, "RSA": 0.0005, "SEN": 0.0065, "CIV": 0.0045, "COD": 0.0015, "CPV": 0.0005, "CZE": 0.0025, "QAT": 0.0005, "BEL": 0.0195, "AUS": 0.0015, "KSA": 0.0005, "AUT": 0.0045, "CRO": 0.0095, "EGY": 0.0025, "SWE": 0.0045}, "matches": [{"a": "KOR", "b": "CZE", "pa": 0.365, "pd": 0.315, "pb": 0.335, "date": "2026-06-11"}, {"a": "MEX", "b": "RSA", "pa": 0.685, "pd": 0.205, "pb": 0.105, "date": "2026-06-11"}, {"a": "CAN", "b": "BIH", "pa": 0.535, "pd": 0.265, "pb": 0.205, "date": "2026-06-12"}, {"a": "USA", "b": "PAR", "pa": 0.495, "pd": 0.285, "pb": 0.235, "date": "2026-06-12"}, {"a": "BRA", "b": "MAR", "pa": 0.605, "pd": 0.245, "pb": 0.165, "date": "2026-06-13"}, {"a": "HAI", "b": "SCO", "pa": 0.145, "pd": 0.215, "pb": 0.65, "date": "2026-06-13"}, {"a": "QAT", "b": "SUI", "pa": 0.067, "pd": 0.135, "pb": 0.795, "date": "2026-06-13"}, {"a": "AUS", "b": "TUR", "pa": 0.185, "pd": 0.265, "pb": 0.555, "date": "2026-06-14"}, {"a": "CIV", "b": "ECU", "pa": 0.265, "pd": 0.335, "pb": 0.395, "date": "2026-06-14"}, {"a": "GER", "b": "CUW", "pa": 0.9435, "pd": 0.0405, "pb": 0.0195, "date": "2026-06-14"}, {"a": "NED", "b": "JPN", "pa": 0.485, "pd": 0.255, "pb": 0.26, "date": "2026-06-14"}, {"a": "SWE", "b": "TUN", "pa": 0.505, "pd": 0.285, "pb": 0.225, "date": "2026-06-14"}, {"a": "BEL", "b": "EGY", "pa": 0.585, "pd": 0.245, "pb": 0.175, "date": "2026-06-15"}, {"a": "ESP", "b": "CPV", "pa": 0.895, "pd": 0.074, "pb": 0.0335, "date": "2026-06-15"}, {"a": "IRN", "b": "NZL", "pa": 0.495, "pd": 0.285, "pb": 0.215, "date": "2026-06-15"}, {"a": "KSA", "b": "URU", "pa": 0.125, "pd": 0.215, "pb": 0.665, "date": "2026-06-15"}, {"a": "ARG", "b": "ALG", "pa": 0.705, "pd": 0.205, "pb": 0.095, "date": "2026-06-16"}, {"a": "FRA", "b": "SEN", "pa": 0.675, "pd": 0.205, "pb": 0.125, "date": "2026-06-16"}, {"a": "IRQ", "b": "NOR", "pa": 0.065, "pd": 0.135, "pb": 0.805, "date": "2026-06-16"}, {"a": "AUT", "b": "JOR", "pa": 0.735, "pd": 0.165, "pb": 0.095, "date": "2026-06-17"}, {"a": "ENG", "b": "CRO", "pa": 0.565, "pd": 0.255, "pb": 0.195, "date": "2026-06-17"}, {"a": "GHA", "b": "PAN", "pa": 0.465, "pd": 0.275, "pb": 0.265, "date": "2026-06-17"}, {"a": "POR", "b": "COD", "pa": 0.765, "pd": 0.165, "pb": 0.075, "date": "2026-06-17"}, {"a": "UZB", "b": "COL", "pa": 0.105, "pd": 0.205, "pb": 0.695, "date": "2026-06-17"}, {"a": "CAN", "b": "QAT", "pa": 0.735, "pd": 0.175, "pb": 0.095, "date": "2026-06-18"}, {"a": "CZE", "b": "RSA", "pa": 0.495, "pd": 0.285, "pb": 0.225, "date": "2026-06-18"}, {"a": "MEX", "b": "KOR", "pa": 0.535, "pd": 0.275, "pb": 0.195, "date": "2026-06-18"}, {"a": "SUI", "b": "BIH", "pa": 0.615, "pd": 0.235, "pb": 0.165, "date": "2026-06-18"}, {"a": "BRA", "b": "HAI", "pa": 0.915, "pd": 0.0625, "pb": 0.0285, "date": "2026-06-19"}, {"a": "SCO", "b": "MAR", "pa": 0.225, "pd": 0.285, "pb": 0.505, "date": "2026-06-19"}, {"a": "TUR", "b": "PAR", "pa": 0.435, "pd": 0.305, "pb": 0.275, "date": "2026-06-19"}, {"a": "USA", "b": "AUS", "pa": 0.555, "pd": 0.245, "pb": 0.215, "date": "2026-06-19"}, {"a": "ECU", "b": "CUW", "pa": 0.815, "pd": 0.125, "pb": 0.0585, "date": "2026-06-20"}, {"a": "GER", "b": "CIV", "pa": 0.635, "pd": 0.205, "pb": 0.165, "date": "2026-06-20"}, {"a": "NED", "b": "SWE", "pa": 0.605, "pd": 0.235, "pb": 0.175, "date": "2026-06-20"}, {"a": "BEL", "b": "IRN", "pa": 0.695, "pd": 0.2, "pb": 0.115, "date": "2026-06-21"}, {"a": "ESP", "b": "KSA", "pa": 0.875, "pd": 0.085, "pb": 0.0355, "date": "2026-06-21"}, {"a": "NZL", "b": "EGY", "pa": 0.195, "pd": 0.255, "pb": 0.555, "date": "2026-06-21"}, {"a": "TUN", "b": "JPN", "pa": 0.175, "pd": 0.275, "pb": 0.565, "date": "2026-06-21"}, {"a": "URU", "b": "CPV", "pa": 0.685, "pd": 0.205, "pb": 0.115, "date": "2026-06-21"}, {"a": "ARG", "b": "AUT", "pa": 0.605, "pd": 0.24, "pb": 0.165, "date": "2026-06-22"}, {"a": "FRA", "b": "IRQ", "pa": 0.865, "pd": 0.095, "pb": 0.0375, "date": "2026-06-22"}, {"a": "JOR", "b": "ALG", "pa": 0.165, "pd": 0.235, "pb": 0.605, "date": "2026-06-22"}, {"a": "NOR", "b": "SEN", "pa": 0.465, "pd": 0.275, "pb": 0.275, "date": "2026-06-22"}, {"a": "COL", "b": "COD", "pa": 0.665, "pd": 0.225, "pb": 0.115, "date": "2026-06-23"}, {"a": "ENG", "b": "GHA", "pa": 0.735, "pd": 0.165, "pb": 0.095, "date": "2026-06-23"}, {"a": "PAN", "b": "CRO", "pa": 0.125, "pd": 0.225, "pb": 0.65, "date": "2026-06-23"}, {"a": "POR", "b": "UZB", "pa": 0.785, "pd": 0.14, "pb": 0.08, "date": "2026-06-23"}, {"a": "BIH", "b": "QAT", "pa": 0.635, "pd": 0.235, "pb": 0.15, "date": "2026-06-24"}, {"a": "CZE", "b": "MEX", "pa": 0.21, "pd": 0.27, "pb": 0.525, "date": "2026-06-24"}, {"a": "MAR", "b": "HAI", "pa": 0.725, "pd": 0.185, "pb": 0.1, "date": "2026-06-24"}, {"a": "RSA", "b": "KOR", "pa": 0.24, "pd": 0.275, "pb": 0.5, "date": "2026-06-24"}, {"a": "SCO", "b": "BRA", "pa": 0.14, "pd": 0.195, "pb": 0.665, "date": "2026-06-24"}, {"a": "SUI", "b": "CAN", "pa": 0.445, "pd": 0.295, "pb": 0.27, "date": "2026-06-24"}, {"a": "CUW", "b": "CIV", "pa": 0.075, "pd": 0.15, "pb": 0.785, "date": "2026-06-25"}, {"a": "ECU", "b": "GER", "pa": 0.2, "pd": 0.25, "pb": 0.58, "date": "2026-06-25"}, {"a": "JPN", "b": "SWE", "pa": 0.475, "pd": 0.285, "pb": 0.255, "date": "2026-06-25"}, {"a": "PAR", "b": "AUS", "pa": 0.445, "pd": 0.305, "pb": 0.265, "date": "2026-06-25"}, {"a": "TUN", "b": "NED", "pa": 0.14, "pd": 0.22, "pb": 0.665, "date": "2026-06-25"}, {"a": "TUR", "b": "USA", "pa": 0.365, "pd": 0.285, "pb": 0.37, "date": "2026-06-25"}, {"a": "CPV", "b": "KSA", "pa": 0.375, "pd": 0.29, "pb": 0.355, "date": "2026-06-26"}, {"a": "EGY", "b": "IRN", "pa": 0.42, "pd": 0.325, "pb": 0.27, "date": "2026-06-26"}, {"a": "NOR", "b": "FRA", "pa": 0.22, "pd": 0.265, "pb": 0.535, "date": "2026-06-26"}, {"a": "NZL", "b": "BEL", "pa": 0.09, "pd": 0.155, "pb": 0.755, "date": "2026-06-26"}, {"a": "SEN", "b": "IRQ", "pa": 0.675, "pd": 0.21, "pb": 0.125, "date": "2026-06-26"}, {"a": "URU", "b": "ESP", "pa": 0.17, "pd": 0.245, "pb": 0.61, "date": "2026-06-26"}, {"a": "ALG", "b": "AUT", "pa": 0.29, "pd": 0.295, "pb": 0.42, "date": "2026-06-27"}, {"a": "COD", "b": "UZB", "pa": 0.425, "pd": 0.295, "pb": 0.295, "date": "2026-06-27"}, {"a": "COL", "b": "POR", "pa": 0.285, "pd": 0.28, "pb": 0.46, "date": "2026-06-27"}, {"a": "CRO", "b": "GHA", "pa": 0.585, "pd": 0.265, "pb": 0.17, "date": "2026-06-27"}, {"a": "JOR", "b": "ARG", "pa": 0.063, "pd": 0.12, "pb": 0.815, "date": "2026-06-27"}, {"a": "PAN", "b": "ENG", "pa": 0.095, "pd": 0.155, "pb": 0.755, "date": "2026-06-27"}], "aliases": {"south korea": "KOR", "korea republic": "KOR", "turkiye": "TUR", "türkiye": "TUR", "turkey": "TUR", "ivory coast": "CIV", "cote d'ivoire": "CIV", "côte d'ivoire": "CIV", "iran": "IRN", "ir iran": "IRN", "cape verde": "CPV", "cabo verde": "CPV", "dr congo": "COD", "congo dr": "COD", "bosnia & herzegovina": "BIH", "bosnia and herzegovina": "BIH", "bosnia-herzegovina": "BIH", "usa": "USA", "united states": "USA", "mexico": "MEX", "south africa": "RSA", "czechia": "CZE", "canada": "CAN", "qatar": "QAT", "switzerland": "SUI", "brazil": "BRA", "morocco": "MAR", "haiti": "HAI", "scotland": "SCO", "paraguay": "PAR", "australia": "AUS", "germany": "GER", "curaçao": "CUW", "ecuador": "ECU", "netherlands": "NED", "japan": "JPN", "sweden": "SWE", "tunisia": "TUN", "belgium": "BEL", "egypt": "EGY", "new zealand": "NZL", "spain": "ESP", "saudi arabia": "KSA", "uruguay": "URU", "france": "FRA", "senegal": "SEN", "iraq": "IRQ", "norway": "NOR", "argentina": "ARG", "algeria": "ALG", "austria": "AUT", "jordan": "JOR", "portugal": "POR", "uzbekistan": "UZB", "colombia": "COL", "england": "ENG", "croatia": "CRO", "ghana": "GHA", "panama": "PAN"}};
+  const WC = {"stamp": "2026-06-20 06:33", "teams": {"MEX": {"name": "Mexico", "flag": "🇲🇽", "rank": 15, "grp": "A"}, "RSA": {"name": "South Africa", "flag": "🇿🇦", "rank": 60, "grp": "A"}, "KOR": {"name": "South Korea", "flag": "🇰🇷", "rank": 25, "grp": "A"}, "CZE": {"name": "Czechia", "flag": "🇨🇿", "rank": 41, "grp": "A"}, "CAN": {"name": "Canada", "flag": "🇨🇦", "rank": 30, "grp": "B"}, "BIH": {"name": "Bosnia & Herzegovina", "flag": "🇧🇦", "rank": 52, "grp": "B"}, "QAT": {"name": "Qatar", "flag": "🇶🇦", "rank": 35, "grp": "B"}, "SUI": {"name": "Switzerland", "flag": "🇨🇭", "rank": 19, "grp": "B"}, "BRA": {"name": "Brazil", "flag": "🇧🇷", "rank": 6, "grp": "C"}, "MAR": {"name": "Morocco", "flag": "🇲🇦", "rank": 8, "grp": "C"}, "HAI": {"name": "Haiti", "flag": "🇭🇹", "rank": 83, "grp": "C"}, "SCO": {"name": "Scotland", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "rank": 47, "grp": "C"}, "USA": {"name": "United States", "flag": "🇺🇸", "rank": 16, "grp": "D"}, "PAR": {"name": "Paraguay", "flag": "🇵🇾", "rank": 64, "grp": "D"}, "AUS": {"name": "Australia", "flag": "🇦🇺", "rank": 26, "grp": "D"}, "TUR": {"name": "Türkiye", "flag": "🇹🇷", "rank": 42, "grp": "D"}, "GER": {"name": "Germany", "flag": "🇩🇪", "rank": 10, "grp": "E"}, "CUW": {"name": "Curaçao", "flag": "🇨🇼", "rank": 81, "grp": "E"}, "CIV": {"name": "Ivory Coast", "flag": "🇨🇮", "rank": 33, "grp": "E"}, "ECU": {"name": "Ecuador", "flag": "🇪🇨", "rank": 24, "grp": "E"}, "NED": {"name": "Netherlands", "flag": "🇳🇱", "rank": 7, "grp": "F"}, "JPN": {"name": "Japan", "flag": "🇯🇵", "rank": 18, "grp": "F"}, "SWE": {"name": "Sweden", "flag": "🇸🇪", "rank": 39, "grp": "F"}, "TUN": {"name": "Tunisia", "flag": "🇹🇳", "rank": 40, "grp": "F"}, "BEL": {"name": "Belgium", "flag": "🇧🇪", "rank": 9, "grp": "G"}, "EGY": {"name": "Egypt", "flag": "🇪🇬", "rank": 29, "grp": "G"}, "IRN": {"name": "Iran", "flag": "🇮🇷", "rank": 21, "grp": "G"}, "NZL": {"name": "New Zealand", "flag": "🇳🇿", "rank": 95, "grp": "G"}, "ESP": {"name": "Spain", "flag": "🇪🇸", "rank": 2, "grp": "H"}, "CPV": {"name": "Cape Verde", "flag": "🇨🇻", "rank": 70, "grp": "H"}, "KSA": {"name": "Saudi Arabia", "flag": "🇸🇦", "rank": 57, "grp": "H"}, "URU": {"name": "Uruguay", "flag": "🇺🇾", "rank": 17, "grp": "H"}, "FRA": {"name": "France", "flag": "🇫🇷", "rank": 1, "grp": "I"}, "SEN": {"name": "Senegal", "flag": "🇸🇳", "rank": 14, "grp": "I"}, "IRQ": {"name": "Iraq", "flag": "🇮🇶", "rank": 61, "grp": "I"}, "NOR": {"name": "Norway", "flag": "🇳🇴", "rank": 44, "grp": "I"}, "ARG": {"name": "Argentina", "flag": "🇦🇷", "rank": 3, "grp": "J"}, "ALG": {"name": "Algeria", "flag": "🇩🇿", "rank": 36, "grp": "J"}, "AUT": {"name": "Austria", "flag": "🇦🇹", "rank": 23, "grp": "J"}, "JOR": {"name": "Jordan", "flag": "🇯🇴", "rank": 68, "grp": "J"}, "POR": {"name": "Portugal", "flag": "🇵🇹", "rank": 5, "grp": "K"}, "COD": {"name": "DR Congo", "flag": "🇨🇩", "rank": 51, "grp": "K"}, "UZB": {"name": "Uzbekistan", "flag": "🇺🇿", "rank": 62, "grp": "K"}, "COL": {"name": "Colombia", "flag": "🇨🇴", "rank": 13, "grp": "K"}, "ENG": {"name": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "rank": 4, "grp": "L"}, "CRO": {"name": "Croatia", "flag": "🇭🇷", "rank": 11, "grp": "L"}, "GHA": {"name": "Ghana", "flag": "🇬🇭", "rank": 65, "grp": "L"}, "PAN": {"name": "Panama", "flag": "🇵🇦", "rank": 53, "grp": "L"}}, "groups": {"A": ["MEX", "KOR", "CZE", "RSA"], "B": ["SUI", "CAN", "QAT", "BIH"], "C": ["BRA", "MAR", "SCO", "HAI"], "D": ["USA", "AUS", "TUR", "PAR"], "E": ["GER", "ECU", "CIV", "CUW"], "F": ["NED", "JPN", "SWE", "TUN"], "G": ["BEL", "IRN", "EGY", "NZL"], "H": ["ESP", "URU", "KSA", "CPV"], "I": ["FRA", "SEN", "NOR", "IRQ"], "J": ["ARG", "AUT", "ALG", "JOR"], "K": ["POR", "COL", "COD", "UZB"], "L": ["ENG", "CRO", "PAN", "GHA"]}, "titleOdds": {"ESP": 0.1365, "NZL": 0.0005, "SUI": 0.0085, "ENG": 0.1285, "FRA": 0.1845, "KOR": 0.0035, "HAI": 0.0005, "BRA": 0.0665, "JOR": 0.0005, "CUW": 0.0005, "ARG": 0.1175, "GER": 0.0585, "COL": 0.0165, "IRN": 0.0005, "POR": 0.0735, "GHA": 0.0005, "NED": 0.0395, "ALG": 0.0005, "BIH": 0.0005, "USA": 0.0385, "CAN": 0.0035, "TUR": 0.0045, "URU": 0.0055, "MEX": 0.0155, "PAR": 0.0015, "SCO": 0.0015, "JPN": 0.0145, "NOR": 0.0245, "TUN": 0.0005, "ECU": 0.0045, "UZB": 0.0005, "MAR": 0.0275, "PAN": 0.0005, "IRQ": 0.0005, "RSA": 0.0005, "SEN": 0.0055, "CIV": 0.0045, "COD": 0.0015, "CPV": 0.0005, "CZE": 0.0005, "QAT": 0.0005, "BEL": 0.0155, "AUS": 0.0035, "KSA": 0.0005, "AUT": 0.0045, "CRO": 0.0065, "EGY": 0.0025, "SWE": 0.0055}, "matches": [{"a": "BRA", "b": "HAI", "pa": 0.885, "pd": 0.0775, "pb": 0.041, "date": "2026-06-19"}, {"a": "SCO", "b": "MAR", "pa": 0.155, "pd": 0.265, "pb": 0.595, "date": "2026-06-19"}, {"a": "TUR", "b": "PAR", "pa": 0.465, "pd": 0.285, "pb": 0.245, "date": "2026-06-19"}, {"a": "USA", "b": "AUS", "pa": 0.973, "pd": 0.0245, "pb": 0.0055, "date": "2026-06-19"}, {"a": "ECU", "b": "CUW", "pa": 0.875, "pd": 0.095, "pb": 0.0375, "date": "2026-06-20"}, {"a": "GER", "b": "CIV", "pa": 0.635, "pd": 0.205, "pb": 0.165, "date": "2026-06-20"}, {"a": "NED", "b": "SWE", "pa": 0.565, "pd": 0.245, "pb": 0.205, "date": "2026-06-20"}, {"a": "BEL", "b": "IRN", "pa": 0.675, "pd": 0.205, "pb": 0.115, "date": "2026-06-21"}, {"a": "ESP", "b": "KSA", "pa": 0.885, "pd": 0.085, "pb": 0.0385, "date": "2026-06-21"}, {"a": "NZL", "b": "EGY", "pa": 0.165, "pd": 0.235, "pb": 0.605, "date": "2026-06-21"}, {"a": "TUN", "b": "JPN", "pa": 0.135, "pd": 0.235, "pb": 0.635, "date": "2026-06-21"}, {"a": "URU", "b": "CPV", "pa": 0.675, "pd": 0.225, "pb": 0.105, "date": "2026-06-21"}, {"a": "ARG", "b": "AUT", "pa": 0.615, "pd": 0.235, "pb": 0.155, "date": "2026-06-22"}, {"a": "FRA", "b": "IRQ", "pa": 0.895, "pd": 0.075, "pb": 0.0265, "date": "2026-06-22"}, {"a": "JOR", "b": "ALG", "pa": 0.155, "pd": 0.235, "pb": 0.615, "date": "2026-06-22"}, {"a": "NOR", "b": "SEN", "pa": 0.415, "pd": 0.275, "pb": 0.315, "date": "2026-06-22"}, {"a": "COL", "b": "COD", "pa": 0.645, "pd": 0.225, "pb": 0.125, "date": "2026-06-23"}, {"a": "ENG", "b": "GHA", "pa": 0.805, "pd": 0.145, "pb": 0.065, "date": "2026-06-23"}, {"a": "PAN", "b": "CRO", "pa": 0.135, "pd": 0.235, "pb": 0.635, "date": "2026-06-23"}, {"a": "POR", "b": "UZB", "pa": 0.815, "pd": 0.135, "pb": 0.055, "date": "2026-06-23"}, {"a": "BIH", "b": "QAT", "pa": 0.675, "pd": 0.195, "pb": 0.135, "date": "2026-06-24"}, {"a": "CZE", "b": "MEX", "pa": 0.295, "pd": 0.255, "pb": 0.455, "date": "2026-06-24"}, {"a": "MAR", "b": "HAI", "pa": 0.765, "pd": 0.165, "pb": 0.085, "date": "2026-06-24"}, {"a": "RSA", "b": "KOR", "pa": 0.155, "pd": 0.245, "pb": 0.605, "date": "2026-06-24"}, {"a": "SCO", "b": "BRA", "pa": 0.125, "pd": 0.185, "pb": 0.695, "date": "2026-06-24"}, {"a": "SUI", "b": "CAN", "pa": 0.395, "pd": 0.315, "pb": 0.295, "date": "2026-06-24"}, {"a": "CUW", "b": "CIV", "pa": 0.045, "pd": 0.105, "pb": 0.855, "date": "2026-06-25"}, {"a": "ECU", "b": "GER", "pa": 0.185, "pd": 0.235, "pb": 0.575, "date": "2026-06-25"}, {"a": "JPN", "b": "SWE", "pa": 0.435, "pd": 0.275, "pb": 0.285, "date": "2026-06-25"}, {"a": "PAR", "b": "AUS", "pa": 0.445, "pd": 0.275, "pb": 0.275, "date": "2026-06-25"}, {"a": "TUN", "b": "NED", "pa": 0.095, "pd": 0.165, "pb": 0.745, "date": "2026-06-25"}, {"a": "TUR", "b": "USA", "pa": 0.385, "pd": 0.225, "pb": 0.385, "date": "2026-06-25"}, {"a": "CPV", "b": "KSA", "pa": 0.345, "pd": 0.265, "pb": 0.405, "date": "2026-06-26"}, {"a": "EGY", "b": "IRN", "pa": 0.465, "pd": 0.295, "pb": 0.245, "date": "2026-06-26"}, {"a": "NOR", "b": "FRA", "pa": 0.215, "pd": 0.235, "pb": 0.555, "date": "2026-06-26"}, {"a": "NZL", "b": "BEL", "pa": 0.075, "pd": 0.145, "pb": 0.785, "date": "2026-06-26"}, {"a": "SEN", "b": "IRQ", "pa": 0.745, "pd": 0.175, "pb": 0.085, "date": "2026-06-26"}, {"a": "URU", "b": "ESP", "pa": 0.155, "pd": 0.225, "pb": 0.635, "date": "2026-06-26"}, {"a": "ALG", "b": "AUT", "pa": 0.305, "pd": 0.315, "pb": 0.375, "date": "2026-06-27"}, {"a": "COD", "b": "UZB", "pa": 0.465, "pd": 0.255, "pb": 0.285, "date": "2026-06-27"}, {"a": "COL", "b": "POR", "pa": 0.265, "pd": 0.265, "pb": 0.475, "date": "2026-06-27"}, {"a": "CRO", "b": "GHA", "pa": 0.595, "pd": 0.245, "pb": 0.155, "date": "2026-06-27"}, {"a": "JOR", "b": "ARG", "pa": 0.0605, "pd": 0.125, "pb": 0.815, "date": "2026-06-27"}, {"a": "PAN", "b": "ENG", "pa": 0.085, "pd": 0.125, "pb": 0.795, "date": "2026-06-27"}], "aliases": {"south korea": "KOR", "korea republic": "KOR", "turkiye": "TUR", "türkiye": "TUR", "turkey": "TUR", "ivory coast": "CIV", "cote d'ivoire": "CIV", "côte d'ivoire": "CIV", "iran": "IRN", "ir iran": "IRN", "cape verde": "CPV", "cabo verde": "CPV", "dr congo": "COD", "congo dr": "COD", "bosnia & herzegovina": "BIH", "bosnia and herzegovina": "BIH", "bosnia-herzegovina": "BIH", "usa": "USA", "united states": "USA", "mexico": "MEX", "south africa": "RSA", "czechia": "CZE", "canada": "CAN", "qatar": "QAT", "switzerland": "SUI", "brazil": "BRA", "morocco": "MAR", "haiti": "HAI", "scotland": "SCO", "paraguay": "PAR", "australia": "AUS", "germany": "GER", "curaçao": "CUW", "ecuador": "ECU", "netherlands": "NED", "japan": "JPN", "sweden": "SWE", "tunisia": "TUN", "belgium": "BEL", "egypt": "EGY", "new zealand": "NZL", "spain": "ESP", "saudi arabia": "KSA", "uruguay": "URU", "france": "FRA", "senegal": "SEN", "iraq": "IRQ", "norway": "NOR", "argentina": "ARG", "algeria": "ALG", "austria": "AUT", "jordan": "JOR", "portugal": "POR", "uzbekistan": "UZB", "colombia": "COL", "england": "ENG", "croatia": "CRO", "ghana": "GHA", "panama": "PAN"}};
   const T = WC.teams, GROUPS = WC.groups;
   const MY = {AUS:1, ENG:1};
   const GAMMA = "https://gamma-api.polymarket.com/events?closed=false&limit=500&tag_slug=fifa-world-cup";
+  const RESULTS_URL = "world-cup-results.json";
   const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   let titleOdds = Object.assign({}, WC.titleOdds);
   let matchMap = {};
   WC.matches.forEach(m => matchMap[[m.a,m.b].sort().join("|")] = m);
+  let results = {};            // "C1|C2" sorted -> {home,away,ha,hb,status,utc}
+  let resultsStamp = null;
 
   const NORM = s => (s||"").toLowerCase().replace(/[^a-z]/g,"");
   const aliasIdx = {};
@@ -427,6 +471,7 @@ setInterval(() => { renderHero(); renderFixtures(); }, 1000);
 
   const pct = x => x==null ? "–" : (x*100>=9.5 ? Math.round(x*100) : (x*100).toFixed(1).replace(/\.0$/,""))+"";
   const dmon = d => { if(!d) return ""; const p=d.split("-"); return parseInt(p[2],10)+" "+MONTHS[parseInt(p[1],10)-1]; };
+  const keyOf = (a,b) => [a,b].sort().join("|");
 
   function renderLead(){
     const el = document.getElementById("wc-lead"); if(!el) return;
@@ -442,43 +487,127 @@ setInterval(() => { renderHero(); renderFixtures(); }, 1000);
     }).join("");
   }
 
-  function fxBar(m){
-    // orient by stored a/b
-    const a=m.a, b=m.b;
-    const pa=m.pa, pd=m.pd, pb=m.pb;
+  function standings(codes){
+    const tab = {}; codes.forEach(c => tab[c] = {c,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});
+    for(let i=0;i<codes.length;i++) for(let j=i+1;j<codes.length;j++){
+      const r = results[keyOf(codes[i],codes[j])];
+      if(!r || r.status!=="FINISHED" || r.ha==null || r.hb==null) continue;
+      const H=tab[r.home], A=tab[r.away]; if(!H||!A) continue;
+      H.p++; A.p++; H.gf+=r.ha; H.ga+=r.hb; A.gf+=r.hb; A.ga+=r.ha;
+      if(r.ha>r.hb){ H.w++; A.l++; H.pts+=3; }
+      else if(r.ha<r.hb){ A.w++; H.l++; A.pts+=3; }
+      else { H.d++; A.d++; H.pts++; A.pts++; }
+    }
+    const arr = codes.map(c=>tab[c]); arr.forEach(x=> x.gd = x.gf-x.ga);
+    const played = arr.some(x=> x.p>0);
+    if(played) arr.sort((a,b)=> b.pts-a.pts || b.gd-a.gd || b.gf-a.gf || T[a.c].rank-T[b.c].rank);
+    else arr.sort((a,b)=> (titleOdds[b.c]||0)-(titleOdds[a.c]||0) || T[a.c].rank-T[b.c].rank);
+    return {arr, played};
+  }
+
+  function fxRow(a, b, nextKey){
+    const k = keyOf(a,b), r = results[k];
+    if(r && (r.status==="FINISHED"||r.status==="LIVE") && r.ha!=null && r.hb!=null){
+      const live = r.status==="LIVE", home=r.home, away=r.away, ha=r.ha, hb=r.hb;
+      const tag = live ? '<span class="rb live">● Live</span>' : '<span class="rb ft">FT</span>';
+      return '<div class="fxr"><div class="ln">'+
+        '<span class="s'+(!live&&ha>hb?" win":"")+'">'+T[home].flag+' '+home+'</span>'+
+        '<span class="sc">'+ha+'–'+hb+'</span>'+
+        '<span class="s'+(!live&&hb>ha?" win":"")+'">'+away+' '+T[away].flag+'</span>'+
+        tag+'</div></div>';
+    }
+    const m = matchMap[k]; if(!m) return "";
     const seg=(cls,p)=> '<i class="'+cls+'" style="width:'+Math.max(0,(p||0)*100)+'%">'+((p||0)>=0.12?pct(p):"")+'</i>';
+    const nx = (k===nextKey) ? '<span class="rb next">Next</span>' : '<span class="dt">'+dmon(m.date)+'</span>';
     return '<div class="fxr">'+
-      '<div class="ln"><span class="s">'+T[a].flag+' '+a+'</span><span class="vs">v</span>'+
-        '<span class="s">'+b+' '+T[b].flag+'</span><span class="dt">'+dmon(m.date)+'</span></div>'+
-      '<div class="bar">'+seg("a",pa)+seg("d",pd)+seg("b",pb)+'</div></div>';
+      '<div class="ln"><span class="s">'+T[m.a].flag+' '+m.a+'</span><span class="vs">v</span>'+
+        '<span class="s">'+m.b+' '+T[m.b].flag+'</span>'+nx+'</div>'+
+      '<div class="bar">'+seg("a",m.pa)+seg("d",m.pd)+seg("b",m.pb)+'</div></div>';
+  }
+
+  function soonestKey(){
+    let best=null, bestD=null;
+    for(const g of Object.keys(GROUPS)){
+      const cs=GROUPS[g];
+      for(let i=0;i<cs.length;i++) for(let j=i+1;j<cs.length;j++){
+        const k=keyOf(cs[i],cs[j]); const r=results[k];
+        if(r && (r.status==="FINISHED"||r.status==="LIVE")) continue;
+        const m=matchMap[k]; const d=(r&&r.utc)?r.utc.slice(0,10):(m?m.date:null);
+        if(!d) continue;
+        if(bestD===null || d<bestD){ bestD=d; best=k; }
+      }
+    }
+    return best;
   }
 
   function renderGroups(){
     const el = document.getElementById("wc-grps"); if(!el) return;
+    const nextKey = soonestKey();
     let html="";
     for (const g of Object.keys(GROUPS)){
-      const codes = GROUPS[g].slice().sort((a,b)=> (titleOdds[b]||0)-(titleOdds[a]||0) || T[a].rank-T[b].rank);
-      const isMe = codes.some(c=>MY[c]);
-      const fav = codes[0];
-      // group fixtures (all pairs within group)
+      const base = GROUPS[g].slice();
+      const {arr, played} = standings(base);
+      const isMe = base.some(c=>MY[c]);
+      const fav = arr[0].c;
       const fx=[];
-      for(let i=0;i<codes.length;i++) for(let j=i+1;j<codes.length;j++){
-        const m = matchMap[[codes[i],codes[j]].sort().join("|")];
-        if(m) fx.push(m);
+      for(let i=0;i<base.length;i++) for(let j=i+1;j<base.length;j++){
+        const a=base[i], b=base[j], k=keyOf(a,b);
+        const r=results[k], m=matchMap[k];
+        const date=(r&&r.utc)?r.utc.slice(0,10):(m?m.date:"");
+        fx.push({a,b,date});
       }
-      fx.sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+      fx.sort((x,y)=>(x.date||"9999").localeCompare(y.date||"9999"));
+      let table;
+      if(played){
+        table = '<table class="gtbl"><thead><tr><th class="l">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>'+
+          arr.map((x,idx)=>{const t=T[x.c]; const cls=(MY[x.c]?"me ":"")+(idx<2?"q":"");
+            return '<tr'+(cls.trim()?' class="'+cls.trim()+'"':'')+'>'+
+              '<td class="tm">'+t.flag+' '+t.name+'</td>'+
+              '<td>'+x.p+'</td><td>'+x.w+'</td><td>'+x.d+'</td><td>'+x.l+'</td>'+
+              '<td>'+x.gf+'</td><td>'+x.ga+'</td>'+
+              '<td>'+(x.gd>0?"+":"")+x.gd+'</td><td class="pts">'+x.pts+'</td></tr>';}).join("")+
+          '</tbody></table>';
+      } else {
+        table = '<table class="gtbl"><thead><tr><th class="l">Team</th><th>FIFA</th><th>Win cup</th></tr></thead><tbody>'+
+          arr.map(x=>{const c=x.c,t=T[c];return '<tr'+(MY[c]?' class="me"':'')+'>'+
+            '<td class="tm">'+t.flag+' '+t.name+'</td><td class="rk">#'+t.rank+'</td>'+
+            '<td class="od">'+(titleOdds[c]>0?pct(titleOdds[c])+"%":"—")+'</td></tr>';}).join("")+
+          '</tbody></table>';
+      }
+      const favTxt = played
+        ? 'leader <b class="lead">'+T[fav].flag+' '+T[fav].name+'</b>'
+        : 'fav <b>'+T[fav].flag+' '+T[fav].name+'</b>';
       html += '<div class="grp'+(isMe?' me':'')+'">'+
         '<div class="gh"><span class="lt">Group '+g+'</span>'+
-          '<span class="fav">fav <b>'+T[fav].flag+' '+T[fav].name+'</b></span></div>'+
-        '<table class="gtbl"><thead><tr><th class="l">Team</th><th>FIFA</th><th>Win cup</th></tr></thead><tbody>'+
-        codes.map(c=>{const t=T[c];return '<tr'+(MY[c]?' class="me"':'')+'>'+
-          '<td class="tm">'+t.flag+' '+t.name+'</td><td class="rk">#'+t.rank+'</td>'+
-          '<td class="od">'+(titleOdds[c]>0?pct(titleOdds[c])+"%":"—")+'</td></tr>';}).join("")+
-        '</tbody></table>'+
-        '<div class="fxlist"><span class="h">Fixtures — Polymarket odds</span>'+
-          fx.map(fxBar).join("")+'</div></div>';
+          '<span class="fav">'+favTxt+'</span></div>'+
+        table+
+        '<div class="fxlist"><span class="h">Fixtures'+(played?'':' — Polymarket odds')+'</span>'+
+          fx.map(f=>fxRow(f.a,f.b,nextKey)).join("")+'</div></div>';
     }
     el.innerHTML = html;
+  }
+
+  // graceful-degradation contract as the odds: if it can't be fetched (file://,
+  async function loadResults(){
+    try{
+      const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),9000);
+      const res=await fetch(RESULTS_URL+"?t="+Date.now(),{signal:ctrl.signal,cache:"no-store"});
+      clearTimeout(to);
+      if(!res.ok) return;
+      const data=await res.json(); const nr={};
+      for(const m of (data.matches||[])){
+        if(!m.a||!m.b) continue;
+        nr[keyOf(m.a,m.b)]={home:m.a,away:m.b,
+          ha:(m.ha==null?null:+m.ha), hb:(m.hb==null?null:+m.hb),
+          status:m.status||"SCHED", utc:m.utc||null};
+      }
+      results=nr; resultsStamp=data.stamp||null;
+      renderGroups();
+      const rm=document.getElementById("wc-resmeta");
+      if(rm){ const n=Object.values(results).filter(r=>r.status==="FINISHED").length;
+        const lv=Object.values(results).filter(r=>r.status==="LIVE").length;
+        rm.textContent=" · "+n+" played"+(lv?" · "+lv+" live":"")+(resultsStamp?" · "+resultsStamp:""); }
+    }catch(e){ /* no results feed yet — odds-only view */ }
   }
 
   function setMeta(live){
@@ -527,11 +656,12 @@ setInterval(() => { renderHero(); renderFixtures(); }, 1000);
   }
 
   renderLead(); renderGroups(); setMeta(false);
-  const btn=document.getElementById("wc-refresh"); if(btn) btn.addEventListener("click",refresh);
+  const btn=document.getElementById("wc-refresh"); if(btn) btn.addEventListener("click",()=>{refresh();loadResults();});
   refresh();
+  loadResults();
+  setInterval(loadResults, 120000);   // re-pull scores every 2 min while the page is open
 })();
 </script>
-<!-- WC-GROUPS-JS:END -->
 
 </body>
 </html>

@@ -1,0 +1,261 @@
+{
+ "stamp": "2026-06-20 17:31",
+ "matches": [
+  {
+   "a": "MEX",
+   "b": "RSA",
+   "ha": 2,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "KOR",
+   "b": "CZE",
+   "ha": 2,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "CZE",
+   "b": "RSA",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "MEX",
+   "b": "KOR",
+   "ha": 1,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "CAN",
+   "b": "BIH",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "QAT",
+   "b": "SUI",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "SUI",
+   "b": "BIH",
+   "ha": 4,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "CAN",
+   "b": "QAT",
+   "ha": 6,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "BRA",
+   "b": "MAR",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "HAI",
+   "b": "SCO",
+   "ha": 0,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "SCO",
+   "b": "MAR",
+   "ha": 0,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "BRA",
+   "b": "HAI",
+   "ha": 3,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "USA",
+   "b": "PAR",
+   "ha": 4,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "AUS",
+   "b": "TUR",
+   "ha": 2,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "USA",
+   "b": "AUS",
+   "ha": 2,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "TUR",
+   "b": "PAR",
+   "ha": 0,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "GER",
+   "b": "CUW",
+   "ha": 7,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "CIV",
+   "b": "ECU",
+   "ha": 1,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "NED",
+   "b": "JPN",
+   "ha": 2,
+   "hb": 2,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "SWE",
+   "b": "TUN",
+   "ha": 5,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "BEL",
+   "b": "EGY",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "IRN",
+   "b": "NZL",
+   "ha": 2,
+   "hb": 2,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "ESP",
+   "b": "CPV",
+   "ha": 0,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "KSA",
+   "b": "URU",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "FRA",
+   "b": "SEN",
+   "ha": 3,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "IRQ",
+   "b": "NOR",
+   "ha": 1,
+   "hb": 4,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "ARG",
+   "b": "ALG",
+   "ha": 3,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "AUT",
+   "b": "JOR",
+   "ha": 3,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "POR",
+   "b": "COD",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "UZB",
+   "b": "COL",
+   "ha": 1,
+   "hb": 3,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "ENG",
+   "b": "CRO",
+   "ha": 4,
+   "hb": 2,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "GHA",
+   "b": "PAN",
+   "ha": 1,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  }
+ ]
+}
