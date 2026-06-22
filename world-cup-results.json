@@ -1,5 +1,5 @@
 {
- "stamp": "2026-06-22 06:07",
+ "stamp": "2026-06-22 20:18",
  "matches": [
   {
    "a": "MEX",
@@ -286,6 +286,14 @@
    "b": "JOR",
    "ha": 3,
    "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "ARG",
+   "b": "AUT",
+   "ha": 2,
+   "hb": 0,
    "status": "FINISHED",
    "utc": null
   },
