@@ -1,5 +1,5 @@
 {
- "stamp": "2026-06-21 21:49",
+ "stamp": "2026-06-22 00:21",
  "matches": [
   {
    "a": "MEX",
@@ -238,6 +238,14 @@
    "b": "KSA",
    "ha": 4,
    "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "URU",
+   "b": "CPV",
+   "ha": 2,
+   "hb": 2,
    "status": "FINISHED",
    "utc": null
   },
