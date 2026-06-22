@@ -1,5 +1,5 @@
 {
- "stamp": "2026-06-22 00:21",
+ "stamp": "2026-06-22 06:07",
  "matches": [
   {
    "a": "MEX",
@@ -214,6 +214,14 @@
    "b": "IRN",
    "ha": 0,
    "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "NZL",
+   "b": "EGY",
+   "ha": 1,
+   "hb": 3,
    "status": "FINISHED",
    "utc": null
   },
