@@ -1,5 +1,5 @@
 {
- "stamp": "2026-06-24 01:49",
+ "stamp": "2026-06-24 05:58",
  "matches": [
   {
    "a": "MEX",
@@ -341,6 +341,14 @@
    "a": "POR",
    "b": "UZB",
    "ha": 5,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "COL",
+   "b": "COD",
+   "ha": 1,
    "hb": 0,
    "status": "FINISHED",
    "utc": null
