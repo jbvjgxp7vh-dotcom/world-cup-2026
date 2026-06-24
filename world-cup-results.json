@@ -1,5 +1,5 @@
 {
- "stamp": "2026-06-24 05:58",
+ "stamp": "2026-06-24 21:01",
  "matches": [
   {
    "a": "MEX",
@@ -62,6 +62,22 @@
    "b": "QAT",
    "ha": 6,
    "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "SUI",
+   "b": "CAN",
+   "ha": 2,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "BIH",
+   "b": "QAT",
+   "ha": 3,
+   "hb": 1,
    "status": "FINISHED",
    "utc": null
   },
