@@ -1,5 +1,5 @@
 {
- "stamp": "2026-06-25 22:53",
+ "stamp": "2026-06-26 04:46",
  "matches": [
   {
    "a": "MEX",
@@ -178,6 +178,22 @@
    "utc": null
   },
   {
+   "a": "TUR",
+   "b": "USA",
+   "ha": 3,
+   "hb": 2,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "PAR",
+   "b": "AUS",
+   "ha": 0,
+   "hb": 0,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
    "a": "GER",
    "b": "CUW",
    "ha": 7,
@@ -254,6 +270,22 @@
    "b": "JPN",
    "ha": 0,
    "hb": 4,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "JPN",
+   "b": "SWE",
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "utc": null
+  },
+  {
+   "a": "TUN",
+   "b": "NED",
+   "ha": 1,
+   "hb": 3,
    "status": "FINISHED",
    "utc": null
   },
