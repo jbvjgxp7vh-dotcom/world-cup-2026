@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-01 16:38",
+ "stamp": "2026-07-01 18:31",
  "matches": [
   {
    "a": "MEX",
@@ -682,12 +682,12 @@
    "b": "COD",
    "a_label": "England",
    "b_label": "DR Congo",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 2,
+   "hb": 1,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "ENG"
   },
   {
    "round": "R32",
@@ -835,9 +835,9 @@
   {
    "round": "R16",
    "a": "MEX",
-   "b": null,
+   "b": "ENG",
    "a_label": "Mexico",
-   "b_label": "W80",
+   "b_label": "England",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
