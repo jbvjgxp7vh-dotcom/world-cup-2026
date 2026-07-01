@@ -193,12 +193,36 @@ footer { margin-top: 28px; padding: 0 24px; color: var(--muted); font-size: 11px
   .fxr .ln .rb.ft{background:rgba(38,208,124,.14);color:var(--green)}
   .fxr .ln .rb.live{background:rgba(239,71,111,.16);color:var(--red);animation:pulse 1.4s infinite}
   .fxr .ln .rb.next{background:rgba(255,205,0,.16);color:var(--gold)}
-  @media(max-width:600px){.wc-odds-bar{margin:2px 16px 0}}
+  /* Knockout bracket (round-by-round columns, from world-cup-results.json .knockout) */
+  .bracket{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px}
+  .bkcol{flex:0 0 auto;min-width:158px;display:flex;flex-direction:column;gap:8px}
+  .bkcol .rh{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:0 2px}
+  .bkm{background:var(--panel);border:1px solid var(--border);border-radius:9px;overflow:hidden}
+  .bkm.done{border-color:rgba(38,208,124,.28)}
+  .bkm .tr{display:flex;align-items:center;gap:6px;padding:5px 8px;font-size:12.5px}
+  .bkm .tr+.tr{border-top:1px solid var(--border)}
+  .bkm .tr .fl{font-size:14px;width:18px;text-align:center;flex:0 0 auto}
+  .bkm .tr .nm{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bkm .tr .sc{font-variant-numeric:tabular-nums;font-weight:800;color:var(--text)}
+  .bkm .tr.win .nm{color:var(--green)}
+  .bkm .tr.los{opacity:.48}
+  .bkm .tr.tbd .nm{color:var(--muted);font-weight:500}
+  .bkm .tr.me{background:rgba(255,205,0,.09)}
+  .bkm .tr.me .nm{color:var(--gold)}
+  .bkm .tr.win.me .nm{color:var(--gold)}
+  .bkm .pens{font-size:9.5px;color:var(--muted);padding:2px 8px 4px;text-align:right;font-variant-numeric:tabular-nums}
+  @media(max-width:600px){.wc-odds-bar{margin:2px 16px 0}.bkcol{min-width:150px}}
 </style>
 
 <div class="wc-odds-bar" id="wc-oddsbar">
   <span class="dot"></span><span id="wc-oddsmeta">odds loading…</span>
   <button id="wc-refresh" type="button">↻ refresh</button>
+</div>
+
+<div class="section" id="sec-bracket" style="display:none">
+  <h2>🏆 Knockout Bracket <span class="sub">single-elimination · winners in <b style="color:var(--green)">green</b> · 🇦🇺 AUS / 🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG highlighted<span id="wc-brmeta"></span></span></h2>
+  <div class="bracket" id="wc-bracket"></div>
+  <div class="note">32 teams from the group stage (top 2 of each group + 8 best third-placed) into a straight knockout. Each tie is 90 min, then extra time and penalties (<b>a.e.t.</b> / <b>pens</b>) if level — the shootout score decides who advances. Slots still to be decided show the feeder match (e.g. <b>W79</b> = winner of match 79). Scroll right for later rounds.</div>
 </div>
 
 <div class="section">
@@ -472,6 +496,7 @@ setInterval(() => { renderHero(); renderFixtures(); }, 1000);
   const pct = x => x==null ? "–" : (x*100>=9.5 ? Math.round(x*100) : (x*100).toFixed(1).replace(/\.0$/,""))+"";
   const dmon = d => { if(!d) return ""; const p=d.split("-"); return parseInt(p[2],10)+" "+MONTHS[parseInt(p[1],10)-1]; };
   const keyOf = (a,b) => [a,b].sort().join("|");
+  const esc = s => (s==null?"":(""+s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"));
 
   function renderLead(){
     const el = document.getElementById("wc-lead"); if(!el) return;
@@ -587,6 +612,50 @@ setInterval(() => { renderHero(); renderFixtures(); }, 1000);
     el.innerHTML = html;
   }
 
+  // Knockout bracket — round-by-round columns from world-cup-results.json .knockout.
+  const RND_ORDER = ["R32","R16","QF","SF","Final","3P"];
+  const RND_TITLE = {R32:"Round of 32", R16:"Round of 16", QF:"Quarter-finals",
+                     SF:"Semi-finals", Final:"Final", "3P":"Third place"};
+  function koRow(code,label,score,isWin,played){
+    const t = code && T[code];
+    const cls = ["tr"];
+    if(!code) cls.push("tbd");
+    if(played){ cls.push(isWin ? "win" : "los"); }
+    if(code && MY[code]) cls.push("me");
+    const fl = t ? t.flag : "";
+    const nm = t ? t.name : (label || "TBD");
+    const sc = (played && score!=null) ? `<span class="sc">${score}</span>` : "";
+    return `<div class="${cls.join(" ")}"><span class="fl">${fl}</span>`
+         + `<span class="nm">${esc(nm)}</span>${sc}</div>`;
+  }
+  function renderBracket(ko){
+    const sec = document.getElementById("sec-bracket");
+    const el  = document.getElementById("wc-bracket");
+    if(!el || !sec) return;
+    if(!ko || !ko.length){ sec.style.display="none"; return; }
+    sec.style.display="";                       // knockout phase has begun — reveal it
+    const byR = {}; ko.forEach(k => (byR[k.round]=byR[k.round]||[]).push(k));
+    let html = "";
+    for(const r of RND_ORDER){
+      const ms = byR[r]; if(!ms || !ms.length) continue;
+      html += `<div class="bkcol"><div class="rh">${RND_TITLE[r]}</div>`;
+      for(const k of ms){
+        const played = k.status==="FINISHED";
+        html += `<div class="bkm${played?" done":""}">`;
+        html += koRow(k.a, k.a_label, k.ha, k.winner && k.winner===k.a, played);
+        html += koRow(k.b, k.b_label, k.hb, k.winner && k.winner===k.b, played);
+        if(k.pens) html += `<div class="pens">pens ${k.pens[0]}–${k.pens[1]}${k.aet?" · a.e.t.":""}</div>`;
+        else if(k.aet && played) html += `<div class="pens">a.e.t.</div>`;
+        html += `</div>`;
+      }
+      html += `</div>`;
+    }
+    el.innerHTML = html;
+    const bm = document.getElementById("wc-brmeta");
+    if(bm){ const played = ko.filter(k=>k.status==="FINISHED").length;
+      bm.textContent = " · " + played + "/" + ko.length + " played"; }
+  }
+
   // graceful-degradation contract as the odds: if it can't be fetched (file://,
   async function loadResults(){
     try{
@@ -603,6 +672,7 @@ setInterval(() => { renderHero(); renderFixtures(); }, 1000);
       }
       results=nr; resultsStamp=data.stamp||null;
       renderGroups();
+      renderBracket(data.knockout||[]);
       const rm=document.getElementById("wc-resmeta");
       if(rm){ const n=Object.values(results).filter(r=>r.status==="FINISHED").length;
         const lv=Object.values(results).filter(r=>r.status==="LIVE").length;
