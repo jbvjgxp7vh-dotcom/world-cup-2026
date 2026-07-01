@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-01 22:06",
+ "stamp": "2026-07-01 23:42",
  "matches": [
   {
    "a": "MEX",
@@ -695,12 +695,12 @@
    "b": "SEN",
    "a_label": "Belgium",
    "b_label": "Senegal",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
-   "aet": false,
+   "ha": 3,
+   "hb": 2,
+   "status": "FINISHED",
+   "aet": true,
    "pens": null,
-   "winner": null
+   "winner": "BEL"
   },
   {
    "round": "R32",
@@ -861,9 +861,9 @@
   {
    "round": "R16",
    "a": null,
-   "b": null,
+   "b": "BEL",
    "a_label": "W81",
-   "b_label": "W82",
+   "b_label": "Belgium",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
