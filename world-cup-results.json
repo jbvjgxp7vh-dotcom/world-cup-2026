@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-02 19:57",
+ "stamp": "2026-07-02 21:18",
  "matches": [
   {
    "a": "MEX",
@@ -721,12 +721,12 @@
    "b": "AUT",
    "a_label": "Spain",
    "b_label": "Austria",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 3,
+   "hb": 0,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "ESP"
   },
   {
    "round": "R32",
@@ -848,9 +848,9 @@
   {
    "round": "R16",
    "a": null,
-   "b": null,
+   "b": "ESP",
    "a_label": "W83",
-   "b_label": "W84",
+   "b_label": "Spain",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
