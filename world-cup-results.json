@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-02 01:52",
+ "stamp": "2026-07-02 06:06",
  "matches": [
   {
    "a": "MEX",
@@ -708,12 +708,12 @@
    "b": "BIH",
    "a_label": "United States",
    "b_label": "Bosnia and Herzego",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 2,
+   "hb": 0,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "USA"
   },
   {
    "round": "R32",
@@ -860,9 +860,9 @@
   },
   {
    "round": "R16",
-   "a": null,
+   "a": "USA",
    "b": "BEL",
-   "a_label": "W81",
+   "a_label": "United States",
    "b_label": "Belgium",
    "ha": null,
    "hb": null,
