@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-03 20:03",
+ "stamp": "2026-07-03 21:22",
  "matches": [
   {
    "a": "MEX",
@@ -760,12 +760,15 @@
    "b": "EGY",
    "a_label": "Australia",
    "b_label": "Egypt",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
-   "aet": false,
-   "pens": null,
-   "winner": null
+   "ha": 1,
+   "hb": 1,
+   "status": "FINISHED",
+   "aet": true,
+   "pens": [
+    2,
+    4
+   ],
+   "winner": "EGY"
   },
   {
    "round": "R32",
@@ -874,9 +877,9 @@
   {
    "round": "R16",
    "a": null,
-   "b": null,
+   "b": "EGY",
    "a_label": "W86",
-   "b_label": "W88",
+   "b_label": "Egypt",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
