@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-02 23:43",
+ "stamp": "2026-07-03 01:22",
  "matches": [
   {
    "a": "MEX",
@@ -734,12 +734,12 @@
    "b": "CRO",
    "a_label": "Portugal",
    "b_label": "Croatia",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 2,
+   "hb": 1,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "POR"
   },
   {
    "round": "R32",
@@ -847,9 +847,9 @@
   },
   {
    "round": "R16",
-   "a": null,
+   "a": "POR",
    "b": "ESP",
-   "a_label": "W83",
+   "a_label": "Portugal",
    "b_label": "Spain",
    "ha": null,
    "hb": null,
