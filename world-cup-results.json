@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-03 01:22",
+ "stamp": "2026-07-03 05:31",
  "matches": [
   {
    "a": "MEX",
@@ -747,12 +747,12 @@
    "b": "ALG",
    "a_label": "Switzerland",
    "b_label": "Algeria",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 2,
+   "hb": 0,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "SUI"
   },
   {
    "round": "R32",
@@ -886,9 +886,9 @@
   },
   {
    "round": "R16",
-   "a": null,
+   "a": "SUI",
    "b": null,
-   "a_label": "W85",
+   "a_label": "Switzerland",
    "b_label": "W87",
    "ha": null,
    "hb": null,
