@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-04 22:11",
+ "stamp": "2026-07-04 23:26",
  "matches": [
   {
    "a": "MEX",
@@ -815,12 +815,12 @@
    "b": "FRA",
    "a_label": "Paraguay",
    "b_label": "France",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 0,
+   "hb": 1,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "FRA"
   },
   {
    "round": "R16",
@@ -902,9 +902,9 @@
   },
   {
    "round": "QF",
-   "a": null,
+   "a": "FRA",
    "b": "MAR",
-   "a_label": "W89",
+   "a_label": "France",
    "b_label": "Morocco",
    "ha": null,
    "hb": null,
