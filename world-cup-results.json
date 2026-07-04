@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-04 01:21",
+ "stamp": "2026-07-04 05:25",
  "matches": [
   {
    "a": "MEX",
@@ -789,12 +789,12 @@
    "b": "GHA",
    "a_label": "Colombia",
    "b_label": "Ghana",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 1,
+   "hb": 0,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "COL"
   },
   {
    "round": "R16",
@@ -890,9 +890,9 @@
   {
    "round": "R16",
    "a": "SUI",
-   "b": null,
+   "b": "COL",
    "a_label": "Switzerland",
-   "b_label": "W87",
+   "b_label": "Colombia",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
