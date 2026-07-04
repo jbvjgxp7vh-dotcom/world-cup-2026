@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-04 05:25",
+ "stamp": "2026-07-04 19:56",
  "matches": [
   {
    "a": "MEX",
@@ -802,12 +802,12 @@
    "b": "MAR",
    "a_label": "Canada",
    "b_label": "Morocco",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 0,
+   "hb": 3,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "MAR"
   },
   {
    "round": "R16",
@@ -903,9 +903,9 @@
   {
    "round": "QF",
    "a": null,
-   "b": null,
+   "b": "MAR",
    "a_label": "W89",
-   "b_label": "W90",
+   "b_label": "Morocco",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
