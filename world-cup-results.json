@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-05 23:50",
+ "stamp": "2026-07-06 04:12",
  "matches": [
   {
    "a": "MEX",
@@ -841,12 +841,12 @@
    "b": "ENG",
    "a_label": "Mexico",
    "b_label": "England",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 2,
+   "hb": 3,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "ENG"
   },
   {
    "round": "R16",
@@ -929,9 +929,9 @@
   {
    "round": "QF",
    "a": "NOR",
-   "b": null,
+   "b": "ENG",
    "a_label": "Norway",
-   "b_label": "W92",
+   "b_label": "England",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
