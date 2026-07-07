@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-07 16:36",
+ "stamp": "2026-07-07 18:35",
  "matches": [
   {
    "a": "MEX",
@@ -880,12 +880,12 @@
    "b": "EGY",
    "a_label": "Argentina",
    "b_label": "Egypt",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 3,
+   "hb": 2,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "ARG"
   },
   {
    "round": "R16",
@@ -941,9 +941,9 @@
   },
   {
    "round": "QF",
-   "a": null,
+   "a": "ARG",
    "b": null,
-   "a_label": "W95",
+   "a_label": "Argentina",
    "b_label": "W96",
    "ha": null,
    "hb": null,
