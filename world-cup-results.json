@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-06 23:16",
+ "stamp": "2026-07-07 01:11",
  "matches": [
   {
    "a": "MEX",
@@ -847,19 +847,6 @@
    "aet": false,
    "pens": null,
    "winner": "ENG"
-  },
-  {
-   "round": "R16",
-   "a": "POR",
-   "b": "ESP",
-   "a_label": "Portugal",
-   "b_label": "Spain",
-   "ha": 0,
-   "hb": 1,
-   "status": "FINISHED",
-   "aet": false,
-   "pens": null,
-   "winner": "ESP"
   },
   {
    "round": "R16",
