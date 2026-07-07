@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-07 01:11",
+ "stamp": "2026-07-07 05:10",
  "matches": [
   {
    "a": "MEX",
@@ -850,16 +850,29 @@
   },
   {
    "round": "R16",
+   "a": "POR",
+   "b": "ESP",
+   "a_label": "Portugal",
+   "b_label": "Spain",
+   "ha": 0,
+   "hb": 1,
+   "status": "FINISHED",
+   "aet": false,
+   "pens": null,
+   "winner": "ESP"
+  },
+  {
+   "round": "R16",
    "a": "USA",
    "b": "BEL",
    "a_label": "United States",
    "b_label": "Belgium",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
+   "ha": 1,
+   "hb": 4,
+   "status": "FINISHED",
    "aet": false,
    "pens": null,
-   "winner": null
+   "winner": "BEL"
   },
   {
    "round": "R16",
@@ -903,9 +916,9 @@
   {
    "round": "QF",
    "a": "ESP",
-   "b": null,
+   "b": "BEL",
    "a_label": "Spain",
-   "b_label": "W94",
+   "b_label": "Belgium",
    "ha": null,
    "hb": null,
    "status": "SCHEDULED",
