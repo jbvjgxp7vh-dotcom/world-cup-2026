@@ -167,6 +167,22 @@ def main():
             "aet": aet, "pens": pens, "winner": winner,
         })
 
+    # Group stage is over and Wikipedia moved the group match boxes off the main
+    # article into per-group sub-articles (2026-07-18), so the page now yields
+    # zero group fixtures. Those results are immutable once played, so reuse the
+    # group matches from the last-good file and keep updating the knockout array
+    # from the page. Stay hard-failed only when there's nothing to fall back on.
+    reused = False
+    if not matches:
+        try:
+            prev0 = json.loads(Path(os.path.expanduser(args.out)).read_text())
+            matches = prev0.get("matches") or []
+            reused = bool(matches)
+        except Exception:
+            pass
+        if reused:
+            log(f"No group fixtures on page — reusing {len(matches)} finished "
+                f"group matches from last-good file.")
     if not matches:
         print("WARN: no finished matches parsed; leaving existing file untouched.",
               file=sys.stderr); return 1
@@ -201,7 +217,10 @@ def main():
         for f in ("p", "w", "d", "l", "gf", "ga", "pts"):
             if comp[code][f] != exp[f]:
                 bad.append((code, f, "got", comp[code][f], "wiki", exp[f]))
-    if not expected or bad:
+    # Reused matches were verified when originally written; if the standings
+    # tables also leave the main article, an empty `expected` isn't a parse
+    # failure in that mode — but any table that IS present must still agree.
+    if (not expected and not reused) or bad:
         print(f"WARN: standings verify FAILED ({len(bad)} field diffs across "
               f"{len(expected)} teams) — keeping last-good file. e.g. {bad[:4]}",
               file=sys.stderr); return 1
