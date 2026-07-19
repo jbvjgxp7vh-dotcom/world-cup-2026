@@ -1,5 +1,5 @@
 {
- "stamp": "2026-07-19 04:42",
+ "stamp": "2026-07-19 22:29",
  "matches": [
   {
    "a": "MEX",
@@ -1000,12 +1000,12 @@
    "b": "ARG",
    "a_label": "Spain",
    "b_label": "Argentina",
-   "ha": null,
-   "hb": null,
-   "status": "SCHEDULED",
-   "aet": false,
+   "ha": 1,
+   "hb": 0,
+   "status": "FINISHED",
+   "aet": true,
    "pens": null,
-   "winner": null
+   "winner": "ESP"
   }
  ]
 }
